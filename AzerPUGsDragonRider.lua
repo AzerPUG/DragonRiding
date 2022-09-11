@@ -12,6 +12,7 @@ local SavedRecharge = 0
 function AZP.DragonRider:OnLoad()
     EventFrame = CreateFrame("Frame", nil, UIParent)
     EventFrame:RegisterEvent("VARIABLES_LOADED")
+    EventFrame:RegisterEvent("ADDON_LOADED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
 end
 
@@ -161,7 +162,15 @@ end
 
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
+        if IsAddOnLoaded("Blizzard_UIWidgets") == true then
+            print("Variables LOADED!")
+        end
+        
         AZP.DragonRider:BuildVigorFrame()
+    elseif event == "ADDON_LOADED" then
+        if ... == "Blizzard_UIWidgets" then
+            print("Blizzard_UIWidgets LOADED!")
+        end
     end
 end
 
