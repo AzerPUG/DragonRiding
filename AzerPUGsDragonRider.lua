@@ -5,7 +5,7 @@ AZP.VersionControl["DragonRider"] = 1
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 
-function AZP.DragonRider.OnLoad()
+function AZP.DragonRider:OnLoad()
 end
 
 
