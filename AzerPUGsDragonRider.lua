@@ -162,15 +162,7 @@ end
 
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
-        if IsAddOnLoaded("Blizzard_UIWidgets") == true then
-            print("Variables LOADED!")
-        end
-        
-        AZP.DragonRider:BuildVigorFrame()
-    elseif event == "ADDON_LOADED" then
-        if ... == "Blizzard_UIWidgets" then
-            print("Blizzard_UIWidgets LOADED!")
-        end
+        C_Timer.After(2, function() AZP.DragonRider:BuildVigorFrame() end)
     end
 end
 
