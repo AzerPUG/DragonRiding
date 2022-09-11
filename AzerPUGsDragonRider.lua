@@ -11,29 +11,28 @@ local SavedRecharge = 0
 
 function AZP.DragonRider:OnLoad()
     EventFrame = CreateFrame("Frame", nil, UIParent)
-    EventFrame:RegisterEvent("ADDON_LOADED")
+    EventFrame:RegisterEvent("VARIABLES_LOADED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
 end
 
-local textureKitRegionFormatStrings = {
-	["BorderLeft"] = "%s-BorderLeft",
-	["BorderRight"] = "%s-BorderRight",
-	["BorderCenter"] = "%s-BorderCenter",
-	["BGLeft"] = "%s-BGLeft",
-	["BGRight"] = "%s-BGRight",
-	["BGCenter"] = "%s-BGCenter",
-	["Spark"] = "%s-Spark",
-	["SparkMask"] = "%s-spark-mask",
-	["BackgroundGlow"] = "%s-BackgroundGlow",
-	["GlowLeft"] = "%s-Glow-BorderLeft",
-	["GlowRight"] = "%s-Glow-BorderRight",
-	["GlowCenter"] = "%s-Glow-BorderCenter",
+local textureKitRegionFormatStrings =
+{
+    ["BorderLeft"] = "%s-BorderLeft",
+    ["BorderRight"] = "%s-BorderRight",
+    ["BorderCenter"] = "%s-BorderCenter",
+    ["BGLeft"] = "%s-BGLeft",
+    ["BGRight"] = "%s-BGRight",
+    ["BGCenter"] = "%s-BGCenter",
+    ["Spark"] = "%s-Spark",
+    ["SparkMask"] = "%s-spark-mask",
+    ["BackgroundGlow"] = "%s-BackgroundGlow",
+    ["GlowLeft"] = "%s-Glow-BorderLeft",
+    ["GlowRight"] = "%s-Glow-BorderRight",
+    ["GlowCenter"] = "%s-Glow-BorderCenter",
 }
 
 
 function AZP.DragonRider:BuildVigorFrame()
-    print("Max Vigor:", AZP.DragonRider:GetMaxVigor())
-
     CustomVigorFrame = CreateFrame("FRAME", nil, UIParent)
     CustomVigorFrame:SetPoint("CENTER", 0, 0)
     CustomVigorFrame:SetSize(242, 100)
@@ -44,60 +43,46 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame:EnableMouse(true)
     CustomVigorFrame:SetScript("OnDragStart", CustomVigorFrame.StartMoving)
     CustomVigorFrame:SetScript("OnDragStop", CustomVigorFrame.StopMovingOrSizing)
-    
+
     TestVar = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
     CustomVigorFrame.RegenBar = CreateFrame("StatusBar", nil, CustomVigorFrame)
-    CustomVigorFrame.RegenBar:SetSize(240, 25)
+    CustomVigorFrame.RegenBar:SetSize(228, 18)
     CustomVigorFrame.RegenBar:SetStatusBarTexture("widgetstatusbar-Fill-white")
     CustomVigorFrame.RegenBar:SetStatusBarColor(RARE_BLUE_COLOR:GetRGB())
     CustomVigorFrame.RegenBar:SetPoint("TOP", 1, -5)
     CustomVigorFrame.RegenBar:SetMinMaxValues(0, 100)
     CustomVigorFrame.RegenBar:SetValue(0)
 
-    -- local fillAtlasInfo = C_Texture.GetAtlasInfo("widgetstatusbar-Fill-white");
-	-- if fillAtlasInfo then
-	-- 	CustomVigorFrame.RegenBar:SetHeight(fillAtlasInfo.height);
-	-- 	CustomVigorFrame.RegenBar:GetStatusBarTexture():SetHorizTile(fillAtlasInfo.tilesHorizontally);
-	-- end
+    CustomVigorFrame.RegenBar.BGL = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
+    CustomVigorFrame.RegenBar.BGL:SetAtlas("widgetstatusbar-BGLeft")
+    CustomVigorFrame.RegenBar.BGL:SetSize(21, 18)
+    CustomVigorFrame.RegenBar.BGL:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", -1, 0)
 
+    CustomVigorFrame.RegenBar.BGC = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
+    CustomVigorFrame.RegenBar.BGC:SetAtlas("widgetstatusbar-BGCenter")
+    CustomVigorFrame.RegenBar.BGC:SetSize(200, 18)
+    CustomVigorFrame.RegenBar.BGC:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
 
-    CustomVigorFrame.RegenBar.BGLeft = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGCenter = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGRight = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGLeft:SetAtlas("widgetstatusbar-BGLeft")
-    CustomVigorFrame.RegenBar.BGCenter:SetAtlas("widgetstatusbar-BGCenter")
-    CustomVigorFrame.RegenBar.BGRight:SetAtlas("widgetstatusbar-BGRight")
-    CustomVigorFrame.RegenBar.BGLeft:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", 0, 0)
-    CustomVigorFrame.RegenBar.BGLeft:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BGLeft:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
-    CustomVigorFrame.RegenBar.BGCenter:SetPoint("LEFT", CustomVigorFrame.RegenBar.BGLeft, "LEFT", 0, 0)
-    CustomVigorFrame.RegenBar.BGCenter:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BGCenter:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
-    CustomVigorFrame.RegenBar.BGRight:SetPoint("LEFT", CustomVigorFrame.RegenBar.BGCenter, "LEFT", 0, 0)
-    CustomVigorFrame.RegenBar.BGRight:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BGRight:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
+    CustomVigorFrame.RegenBar.BGR = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
+    CustomVigorFrame.RegenBar.BGR:SetAtlas("widgetstatusbar-BGRight")
+    CustomVigorFrame.RegenBar.BGR:SetSize(21, 18)
+    CustomVigorFrame.RegenBar.BGR:SetPoint("RIGHT", CustomVigorFrame.RegenBar, "RIGHT", 1, 0)
 
-    CustomVigorFrame.RegenBar.BorderLeft = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BorderCenter = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BorderRight = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BorderLeft:SetAtlas("widgetstatusbar-BorderLeft")
-    CustomVigorFrame.RegenBar.BorderCenter:SetAtlas("widgetstatusbar-BorderCenter")
-    CustomVigorFrame.RegenBar.BorderRight:SetAtlas("widgetstatusbar-BorderRight")
-    CustomVigorFrame.RegenBar.BorderLeft:SetSize(20, 25)
-    -- CustomVigorFrame.RegenBar.BorderCenter:SetSize(200, 25)
-    CustomVigorFrame.RegenBar.BorderRight:SetSize(20, 25)
-    CustomVigorFrame.RegenBar.BorderLeft:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", 8, 0)
-    CustomVigorFrame.RegenBar.BorderLeft:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BorderLeft:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
-    CustomVigorFrame.RegenBar.BorderCenter:SetPoint("LEFT", CustomVigorFrame.RegenBar.BorderLeft, "LEFT", 0, 0)
-    CustomVigorFrame.RegenBar.BorderCenter:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BorderCenter:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
-    CustomVigorFrame.RegenBar.BorderRight:SetPoint("LEFT", CustomVigorFrame.RegenBar.BorderCenter, "LEFT", 0, 0)
-    CustomVigorFrame.RegenBar.BorderRight:SetPoint("RIGHT", CustomVigorFrame.RegenBar, "RIGHT", -8, 0)
-    CustomVigorFrame.RegenBar.BorderRight:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-    CustomVigorFrame.RegenBar.BorderRight:SetPoint("BOTTOM", CustomVigorFrame.RegenBar, "BOTTOM", 0, 0)
+    CustomVigorFrame.RegenBar.BorderL = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
+    CustomVigorFrame.RegenBar.BorderL:SetAtlas("widgetstatusbar-BorderLeft")
+    CustomVigorFrame.RegenBar.BorderL:SetSize(31, 30)
+    CustomVigorFrame.RegenBar.BorderL:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", -7, 0)
 
-    -- CustomVigorFrame.RegenBar.BG:SetVertexColor(1, 0, 0)
+    CustomVigorFrame.RegenBar.BorderC = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
+    CustomVigorFrame.RegenBar.BorderC:SetAtlas("widgetstatusbar-BorderCenter")
+    CustomVigorFrame.RegenBar.BorderC:SetSize(180, 30)
+    CustomVigorFrame.RegenBar.BorderC:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 6)
+
+    CustomVigorFrame.RegenBar.BorderR = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
+    CustomVigorFrame.RegenBar.BorderR:SetAtlas("widgetstatusbar-BorderRight")
+    CustomVigorFrame.RegenBar.BorderR:SetSize(31, 30)
+    CustomVigorFrame.RegenBar.BorderR:SetPoint("RIGHT", CustomVigorFrame.RegenBar, "RIGHT", 7, 0)
+
     CustomVigorFrame.VigorGems = {}
     CustomVigorFrame.VigorGemsSlots = {}
     MaxVigor = AZP.DragonRider:GetMaxVigor()
@@ -153,7 +138,7 @@ end
 
 function AZP.DragonRider:IsDragonRiding()
     for i = 1, 40 do
-        local SpellName, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
+        local _, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
         if SpellID == nil then return false end
 
         if SpellID == 368896 then
@@ -175,10 +160,8 @@ function AZP.DragonRider:GetCurrentVigor()
 end
 
 function AZP.DragonRider:OnEvent(_, event, ...)
-    if event == "ADDON_LOADED" then
-        if ... == "AzerPUGsDragonRider" then
-            AZP.DragonRider:BuildVigorFrame()
-        end
+    if event == "VARIABLES_LOADED" then
+        AZP.DragonRider:BuildVigorFrame()
     end
 end
 
