@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 3
+AZP.VersionControl["DragonRider"] = 4
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame = nil
