@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 1
+AZP.VersionControl["DragonRider"] = 3
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame = nil
@@ -15,6 +15,24 @@ function AZP.DragonRider:OnLoad()
     EventFrame:RegisterEvent("ADDON_LOADED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
 end
+
+local NewDragonRidingTextures =
+{
+    "dragonriding_vigor_background-2x",
+    "dragonriding_vigor_decor-2x",
+    "dragonriding_vigor_fill-2x",
+    "dragonriding_vigor_flash-2x",
+    "dragonriding_vigor_frame-2x",
+    "dragonriding_vigor_spark-2x",
+}
+
+local frameTextureKitRegions = {
+	BG = "%s_background",
+	Frame = "%s_frame",
+	Spark = "%s_spark",
+	SparkMask = "%s_mask",
+	Flash = "%s_flash",
+};
 
 local textureKitRegionFormatStrings =
 {
@@ -89,7 +107,8 @@ function AZP.DragonRider:BuildVigorFrame()
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
     for i = 1, 6 do
-        CustomVigorFrame.VigorGemsSlots[i] = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
+        CustomVigorFrame.VigorGemsSlots[i] = CreateFrame()
+            -- CreateTexture(nil, "BACKGROUND")
         CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 64)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
@@ -104,23 +123,27 @@ function AZP.DragonRider:BuildVigorFrame()
         CustomVigorFrame.VigorGems[i]:Hide()
     end
 
+    CustomVigorFrame.RegenBar.Percent = CustomVigorFrame.RegenBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    CustomVigorFrame.RegenBar.Percent:SetPoint("CENTER", 0, 0)
+    CustomVigorFrame.RegenBar.Percent:SetText("N/A")
+
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
 
 function AZP.DragonRider:FillVigorFrame()
-    if SavedVigor < MaxVigor then
-        CustomVigorFrame.RegenBar:SetValue(AZP.DragonRider:GetRechargePercent())
-    else
-        CustomVigorFrame.RegenBar:SetValue(0)
-    end
-
     local curRecharge = AZP.DragonRider:GetRechargePercent()
     local curVigor = AZP.DragonRider:GetCurrentVigor()
 
-    if IsMounted() == true then
-        if AZP.DragonRider:IsDragonRiding() == true then
-            SavedVigor = curVigor
-        end
+    if SavedVigor < MaxVigor then
+        CustomVigorFrame.RegenBar:SetValue(curRecharge)
+        CustomVigorFrame.RegenBar.Percent:SetText(string.format("%d%%", curRecharge))
+    else
+        CustomVigorFrame.RegenBar:SetValue(0)
+        CustomVigorFrame.RegenBar.Percent:SetText("0%")
+    end
+
+    if AZP.DragonRider:IsDragonRiding() == true then
+        SavedVigor = curVigor
     else
         if curRecharge < SavedRecharge and curRecharge ~= 0 then
             if SavedVigor < MaxVigor then
@@ -128,7 +151,6 @@ function AZP.DragonRider:FillVigorFrame()
             end
         end
     end
-
 
     for i = 1, MaxVigor do
         if i <= SavedVigor then CustomVigorFrame.VigorGems[i]:Show()
@@ -139,10 +161,9 @@ end
 
 function AZP.DragonRider:IsDragonRiding()
     for i = 1, 40 do
-        local _, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
+        local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
         if SpellID == nil then return false end
-
-        if SpellID == 368896 then
+        if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
             return true
         end
     end
