@@ -90,8 +90,9 @@ function AZP.DragonRider:BuildVigorFrame()
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
     for i = 1, 6 do
-        CustomVigorFrame.VigorGemsSlots[i] = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-        CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 64)
+        CustomVigorFrame.VigorGemsSlots[i] = CreateFrame("StatusBar", nil, CustomVigorFrame, "UIWidgetFillUpFrameTemplate")
+            -- CreateTexture(nil, "BACKGROUND")
+        CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 32)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
         CustomVigorFrame.VigorGemsSlots[i]:SetAtlas("jailerstower-score-disabled-gem-icon")
@@ -146,8 +147,9 @@ function AZP.DragonRider:FillVigorFrame()
     end
 
     for i = 1, MaxVigor do
-        if i <= SavedVigor then CustomVigorFrame.VigorGems[i]:Show()
-        else CustomVigorFrame.VigorGems[i]:Hide() end
+        if i < SavedVigor then CustomVigorFrame.VigorGemsSlots[i]:SetValue(100)
+        elseif i == SavedVigor then CustomVigorFrame.VigorGemsSlots[i]:SetValue(curRecharge)
+        else CustomVigorFrame.VigorGemsSlots[i]:SetValue(0) end
     end
     if curRecharge ~= 0 then SavedRecharge = curRecharge end
 end
