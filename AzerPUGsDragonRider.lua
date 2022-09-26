@@ -90,8 +90,7 @@ function AZP.DragonRider:BuildVigorFrame()
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
     for i = 1, 6 do
-        CustomVigorFrame.VigorGemsSlots[i] = CreateFrame()
-            -- CreateTexture(nil, "BACKGROUND")
+        CustomVigorFrame.VigorGemsSlots[i] = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
         CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 64)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
@@ -112,7 +111,7 @@ function AZP.DragonRider:BuildVigorFrame()
 
     CustomVigorFrame.LeftWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
     CustomVigorFrame.LeftWing:SetAtlas("dragonriding_vigor_decor-2x")
-    CustomVigorFrame.LeftWing:SetTextCoord(1, 0, 0, 1)
+    CustomVigorFrame.LeftWing:SetTexCoord(1, 0, 0, 1)
     CustomVigorFrame.LeftWing:SetSize(93, 117)
     CustomVigorFrame.LeftWing:SetPoint("LEFT", CustomVigorFrame, "LEFT", 0, 0)
 
