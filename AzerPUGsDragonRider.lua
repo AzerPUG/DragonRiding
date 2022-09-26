@@ -114,12 +114,12 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.LeftWing:SetAtlas("dragonriding_vigor_decor-2x")
     CustomVigorFrame.LeftWing:SetTexCoord(1, 0, 0, 1)
     CustomVigorFrame.LeftWing:SetSize(93, 117)
-    CustomVigorFrame.LeftWing:SetPoint("LEFT", CustomVigorFrame, "LEFT", 0, 0)
+    CustomVigorFrame.LeftWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
 
     CustomVigorFrame.RightWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
     CustomVigorFrame.RightWing:SetAtlas("dragonriding_vigor_decor-2x")
     CustomVigorFrame.RightWing:SetSize(93, 117)
-    CustomVigorFrame.RightWing:SetPoint("RIGHT", CustomVigorFrame, "RIGHT", 0, 0)
+    CustomVigorFrame.RightWing:SetPoint("RIGHT", CustomVigorFrame, "LEFT", 0, 0)
 
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
