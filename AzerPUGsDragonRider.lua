@@ -34,23 +34,6 @@ local frameTextureKitRegions = {
 	Flash = "%s_flash",
 };
 
-local textureKitRegionFormatStrings =
-{
-    ["BorderLeft"] = "%s-BorderLeft",
-    ["BorderRight"] = "%s-BorderRight",
-    ["BorderCenter"] = "%s-BorderCenter",
-    ["BGLeft"] = "%s-BGLeft",
-    ["BGRight"] = "%s-BGRight",
-    ["BGCenter"] = "%s-BGCenter",
-    ["Spark"] = "%s-Spark",
-    ["SparkMask"] = "%s-spark-mask",
-    ["BackgroundGlow"] = "%s-BackgroundGlow",
-    ["GlowLeft"] = "%s-Glow-BorderLeft",
-    ["GlowRight"] = "%s-Glow-BorderRight",
-    ["GlowCenter"] = "%s-Glow-BorderCenter",
-}
-
-
 function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame = CreateFrame("FRAME", nil, UIParent)
     CustomVigorFrame:SetPoint("CENTER", 0, 0)
@@ -126,6 +109,17 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.RegenBar.Percent = CustomVigorFrame.RegenBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     CustomVigorFrame.RegenBar.Percent:SetPoint("CENTER", 0, 0)
     CustomVigorFrame.RegenBar.Percent:SetText("N/A")
+
+    CustomVigorFrame.LeftWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
+    CustomVigorFrame.LeftWing:SetAtlas("dragonriding_vigor_decor-2x")
+    CustomVigorFrame.LeftWing:SetTextCoord(1, 0, 0, 1)
+    CustomVigorFrame.LeftWing:SetSize(93, 117)
+    CustomVigorFrame.LeftWing:SetPoint("LEFT", CustomVigorFrame, "LEFT", 0, 0)
+
+    CustomVigorFrame.RightWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
+    CustomVigorFrame.RightWing:SetAtlas("dragonriding_vigor_decor-2x")
+    CustomVigorFrame.RightWing:SetSize(93, 117)
+    CustomVigorFrame.RightWing:SetPoint("RIGHT", CustomVigorFrame, "RIGHT", 0, 0)
 
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
