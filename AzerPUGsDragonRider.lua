@@ -91,19 +91,23 @@ function AZP.DragonRider:BuildVigorFrame()
     SavedVigor = MaxVigor
     for i = 1, 6 do
         CustomVigorFrame.VigorGemsSlots[i] = CreateFrame("StatusBar", nil, CustomVigorFrame, "UIWidgetFillUpFrameTemplate")
-            -- CreateTexture(nil, "BACKGROUND")
         CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 32)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
-        CustomVigorFrame.VigorGemsSlots[i]:SetAtlas("jailerstower-score-disabled-gem-icon")
 
         if i > MaxVigor then CustomVigorFrame.VigorGemsSlots[i]:Hide() end
 
-        CustomVigorFrame.VigorGems[i] = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-        CustomVigorFrame.VigorGems[i]:SetSize(32, 64)
-        CustomVigorFrame.VigorGems[i]:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i], "CENTER", 0, 0)
-        CustomVigorFrame.VigorGems[i]:SetAtlas("jailerstower-score-gem-icon")
-        CustomVigorFrame.VigorGems[i]:Hide()
+        local curFrame = CustomVigorFrame.VigorGemsSlots[i]
+
+        curFrame.BG = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
+        curFrame.BG:SetSize(32, 64)
+        curFrame.BG:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i], "CENTER", 0, 0)
+        curFrame.BG:SetAtlas("jailerstower-score-disabled-gem-icon")
+
+        curFrame.Gem = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
+        curFrame.Gem:SetSize(32, 64)
+        curFrame.Gem:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i], "CENTER", 0, 0)
+        curFrame.Gem:SetAtlas("jailerstower-score-gem-icon")
     end
 
     CustomVigorFrame.RegenBar.Percent = CustomVigorFrame.RegenBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
