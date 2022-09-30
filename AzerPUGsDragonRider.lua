@@ -94,20 +94,13 @@ function AZP.DragonRider:BuildVigorFrame()
         CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 32)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
+        CustomVigorFrame.VigorGemsSlots[i].BG:SetAtlas("dragonriding_vigor_background")
+        CustomVigorFrame.VigorGemsSlots[i].BG:SetSize(32, 32)
+        CustomVigorFrame.VigorGemsSlots[i].Bar:SetStatusBarTexture("dragonriding_vigor_fill")
+        CustomVigorFrame.VigorGemsSlots[i].Bar:SetSize(32, 32)
+        CustomVigorFrame.VigorGemsSlots[i].Bar:SetMinMaxValues(0, 100)
 
         if i > MaxVigor then CustomVigorFrame.VigorGemsSlots[i]:Hide() end
-
-        local curFrame = CustomVigorFrame.VigorGemsSlots[i]
-
-        curFrame.BG = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-        curFrame.BG:SetSize(32, 64)
-        curFrame.BG:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i], "CENTER", 0, 0)
-        curFrame.BG:SetAtlas("jailerstower-score-disabled-gem-icon")
-
-        curFrame.Gem = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-        curFrame.Gem:SetSize(32, 64)
-        curFrame.Gem:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i], "CENTER", 0, 0)
-        curFrame.Gem:SetAtlas("jailerstower-score-gem-icon")
     end
 
     CustomVigorFrame.RegenBar.Percent = CustomVigorFrame.RegenBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -151,9 +144,9 @@ function AZP.DragonRider:FillVigorFrame()
     end
 
     for i = 1, MaxVigor do
-        if i < SavedVigor then CustomVigorFrame.VigorGemsSlots[i]:SetValue(100)
-        elseif i == SavedVigor then CustomVigorFrame.VigorGemsSlots[i]:SetValue(curRecharge)
-        else CustomVigorFrame.VigorGemsSlots[i]:SetValue(0) end
+        if i <= SavedVigor then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(100)
+        elseif i == SavedVigor + 1 then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(curRecharge)
+        else CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(0) end
     end
     if curRecharge ~= 0 then SavedRecharge = curRecharge end
 end
