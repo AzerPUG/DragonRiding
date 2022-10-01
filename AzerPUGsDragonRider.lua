@@ -1,10 +1,10 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 4
+AZP.VersionControl["DragonRider"] = 5
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
-local EventFrame = nil
+local EventFrame, CustomVigorFrame = nil, nil
 local SavedVigor = 0
 local MaxVigor = 0
 local SavedRecharge = 0
@@ -47,76 +47,49 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame:SetScript("OnDragStop", CustomVigorFrame.StopMovingOrSizing)
 
     TestVar = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
-    CustomVigorFrame.RegenBar = CreateFrame("StatusBar", nil, CustomVigorFrame)
-    CustomVigorFrame.RegenBar:SetSize(228, 18)
-    CustomVigorFrame.RegenBar:SetStatusBarTexture("widgetstatusbar-Fill-white")
-    CustomVigorFrame.RegenBar:SetStatusBarColor(RARE_BLUE_COLOR:GetRGB())
-    CustomVigorFrame.RegenBar:SetPoint("TOP", 1, -5)
-    CustomVigorFrame.RegenBar:SetMinMaxValues(0, 100)
-    CustomVigorFrame.RegenBar:SetValue(0)
 
-    CustomVigorFrame.RegenBar.BGL = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGL:SetAtlas("widgetstatusbar-BGLeft")
-    CustomVigorFrame.RegenBar.BGL:SetSize(21, 18)
-    CustomVigorFrame.RegenBar.BGL:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", -1, 0)
-
-    CustomVigorFrame.RegenBar.BGC = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGC:SetAtlas("widgetstatusbar-BGCenter")
-    CustomVigorFrame.RegenBar.BGC:SetSize(200, 18)
-    CustomVigorFrame.RegenBar.BGC:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 0)
-
-    CustomVigorFrame.RegenBar.BGR = CustomVigorFrame.RegenBar:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RegenBar.BGR:SetAtlas("widgetstatusbar-BGRight")
-    CustomVigorFrame.RegenBar.BGR:SetSize(21, 18)
-    CustomVigorFrame.RegenBar.BGR:SetPoint("RIGHT", CustomVigorFrame.RegenBar, "RIGHT", 1, 0)
-
-    CustomVigorFrame.RegenBar.BorderL = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
-    CustomVigorFrame.RegenBar.BorderL:SetAtlas("widgetstatusbar-BorderLeft")
-    CustomVigorFrame.RegenBar.BorderL:SetSize(31, 30)
-    CustomVigorFrame.RegenBar.BorderL:SetPoint("LEFT", CustomVigorFrame.RegenBar, "LEFT", -7, 0)
-
-    CustomVigorFrame.RegenBar.BorderC = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
-    CustomVigorFrame.RegenBar.BorderC:SetAtlas("widgetstatusbar-BorderCenter")
-    CustomVigorFrame.RegenBar.BorderC:SetSize(180, 30)
-    CustomVigorFrame.RegenBar.BorderC:SetPoint("TOP", CustomVigorFrame.RegenBar, "TOP", 0, 6)
-
-    CustomVigorFrame.RegenBar.BorderR = CustomVigorFrame.RegenBar:CreateTexture(nil, "OVERLAY")
-    CustomVigorFrame.RegenBar.BorderR:SetAtlas("widgetstatusbar-BorderRight")
-    CustomVigorFrame.RegenBar.BorderR:SetSize(31, 30)
-    CustomVigorFrame.RegenBar.BorderR:SetPoint("RIGHT", CustomVigorFrame.RegenBar, "RIGHT", 7, 0)
-
-    CustomVigorFrame.VigorGems = {}
     CustomVigorFrame.VigorGemsSlots = {}
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
+
+    local VigorGemWidth, VigorGemHeight = 30, 32
+
     for i = 1, 6 do
         CustomVigorFrame.VigorGemsSlots[i] = CreateFrame("StatusBar", nil, CustomVigorFrame, "UIWidgetFillUpFrameTemplate")
-        CustomVigorFrame.VigorGemsSlots[i]:SetSize(32, 32)
+        CustomVigorFrame.VigorGemsSlots[i]:SetSize(VigorGemWidth, VigorGemHeight)
         if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
-        else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 10, 0) end
+        else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 12, 0) end
         CustomVigorFrame.VigorGemsSlots[i].BG:SetAtlas("dragonriding_vigor_background")
-        CustomVigorFrame.VigorGemsSlots[i].BG:SetSize(32, 32)
+        CustomVigorFrame.VigorGemsSlots[i].BG:SetSize(VigorGemWidth, VigorGemHeight)
         CustomVigorFrame.VigorGemsSlots[i].Bar:SetStatusBarTexture("dragonriding_vigor_fill")
-        CustomVigorFrame.VigorGemsSlots[i].Bar:SetSize(32, 32)
+        CustomVigorFrame.VigorGemsSlots[i].Bar:SetSize(VigorGemWidth, VigorGemHeight)
         CustomVigorFrame.VigorGemsSlots[i].Bar:SetMinMaxValues(0, 100)
+
+        CustomVigorFrame.VigorGemsSlots[i].Spark:SetAtlas("dragonriding_vigor_spark")
+        CustomVigorFrame.VigorGemsSlots[i].Spark:SetSize(VigorGemWidth, VigorGemHeight / 4)
+        CustomVigorFrame.VigorGemsSlots[i].Spark:SetPoint("CENTER", CustomVigorFrame.VigorGemsSlots[i].Bar:GetStatusBarTexture(), "TOP", 0, 0)
+        CustomVigorFrame.VigorGemsSlots[i].Spark:Hide()
+
+        CustomVigorFrame.VigorGemsSlots[i].SparkMask:SetAtlas("dragonriding_vigor_mask")
+        CustomVigorFrame.VigorGemsSlots[i].SparkMask:SetSize(VigorGemWidth * 2, VigorGemHeight * 2)
+
+        CustomVigorFrame.VigorGemsSlots[i].Frame:SetAtlas("dragonriding_vigor_frame")
+        CustomVigorFrame.VigorGemsSlots[i].Frame:SetSize(VigorGemWidth * 2, VigorGemHeight * 2)
 
         if i > MaxVigor then CustomVigorFrame.VigorGemsSlots[i]:Hide() end
     end
 
-    CustomVigorFrame.RegenBar.Percent = CustomVigorFrame.RegenBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    CustomVigorFrame.RegenBar.Percent:SetPoint("CENTER", 0, 0)
-    CustomVigorFrame.RegenBar.Percent:SetText("N/A")
-
     CustomVigorFrame.LeftWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.LeftWing:SetAtlas("dragonriding_vigor_decor-2x")
+    CustomVigorFrame.LeftWing:SetAtlas("dragonriding_vigor_decor")
     CustomVigorFrame.LeftWing:SetTexCoord(1, 0, 0, 1)
-    CustomVigorFrame.LeftWing:SetSize(93, 117)
-    CustomVigorFrame.LeftWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
+    CustomVigorFrame.LeftWing:SetSize(46, 59)
+    CustomVigorFrame.LeftWing:SetPoint("RIGHT", CustomVigorFrame, "LEFT", 14, -15)
 
     CustomVigorFrame.RightWing = CustomVigorFrame:CreateTexture(nil, "BACKGROUND")
-    CustomVigorFrame.RightWing:SetAtlas("dragonriding_vigor_decor-2x")
-    CustomVigorFrame.RightWing:SetSize(93, 117)
-    CustomVigorFrame.RightWing:SetPoint("RIGHT", CustomVigorFrame, "LEFT", 0, 0)
+    CustomVigorFrame.RightWing:SetAtlas("dragonriding_vigor_decor")
+    CustomVigorFrame.RightWing:SetSize(46, 59)
+    CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
+    CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[MaxVigor], "RIGHT", -13, -15)
 
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
@@ -124,14 +97,6 @@ end
 function AZP.DragonRider:FillVigorFrame()
     local curRecharge = AZP.DragonRider:GetRechargePercent()
     local curVigor = AZP.DragonRider:GetCurrentVigor()
-
-    if SavedVigor < MaxVigor then
-        CustomVigorFrame.RegenBar:SetValue(curRecharge)
-        CustomVigorFrame.RegenBar.Percent:SetText(string.format("%d%%", curRecharge))
-    else
-        CustomVigorFrame.RegenBar:SetValue(0)
-        CustomVigorFrame.RegenBar.Percent:SetText("0%")
-    end
 
     if AZP.DragonRider:IsDragonRiding() == true then
         SavedVigor = curVigor
@@ -143,11 +108,15 @@ function AZP.DragonRider:FillVigorFrame()
         end
     end
 
+    local NextVigor = SavedVigor + 1
+
     for i = 1, MaxVigor do
         if i <= SavedVigor then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(100)
-        elseif i == SavedVigor + 1 then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(curRecharge)
+        elseif i == NextVigor then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(curRecharge)
         else CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(0) end
+        CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(i == SavedVigor + 1)
     end
+    --CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(NextVigor and curRecharge > 0 and curRecharge < 100)
     if curRecharge ~= 0 then SavedRecharge = curRecharge end
 end
 
