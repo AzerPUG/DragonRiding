@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 5
+AZP.VersionControl["DragonRider"] = 6
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -36,7 +36,6 @@ local frameTextureKitRegions = {
 
 function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame = CreateFrame("FRAME", nil, UIParent)
-    CustomVigorFrame:SetPoint("CENTER", 0, 0)
     CustomVigorFrame:SetSize(242, 100)
     CustomVigorFrame:SetFrameStrata("MEDIUM")
     CustomVigorFrame:SetFrameLevel(8)
@@ -44,7 +43,7 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame:SetMovable(true)
     CustomVigorFrame:EnableMouse(true)
     CustomVigorFrame:SetScript("OnDragStart", CustomVigorFrame.StartMoving)
-    CustomVigorFrame:SetScript("OnDragStop", CustomVigorFrame.StopMovingOrSizing)
+    CustomVigorFrame:SetScript("OnDragStop", function() AZP.DragonRider:SavePosition() CustomVigorFrame:StopMovingOrSizing() end)
 
     TestVar = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
 
@@ -130,6 +129,16 @@ function AZP.DragonRider:IsDragonRiding()
     end
 end
 
+function AZP.DragonRider:SavePosition()
+    local v1, v2, v3, v4, v5 = CustomVigorFrame:GetPoint()
+    VigorFramePosition = {v1, v2, v3, v4, v5}
+end
+
+function AZP.DragonRider:LoadPosition()
+    if VigorFramePosition == nil then CustomVigorFrame:SetPoint("CENTER", 0, 0)
+    else CustomVigorFrame:SetPoint(VigorFramePosition[1], VigorFramePosition[2], VigorFramePosition[3], VigorFramePosition[4], VigorFramePosition[5]) end
+end
+
 function AZP.DragonRider:GetRechargePercent()
     return C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220).barValue
 end
@@ -144,7 +153,10 @@ end
 
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
-        C_Timer.After(2, function() AZP.DragonRider:BuildVigorFrame() end)
+        C_Timer.After(2, function()
+            AZP.DragonRider:BuildVigorFrame()
+            AZP.DragonRider:LoadPosition()
+        end)
     end
 end
 

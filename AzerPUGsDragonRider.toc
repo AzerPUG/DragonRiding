@@ -1,2 +1,3 @@
+## SavedVariables: VigorFramePosition
 
 AzerPUGsDragonRider.lua
