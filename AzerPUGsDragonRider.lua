@@ -90,6 +90,9 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[MaxVigor], "RIGHT", -13, -15)
 
+    CustomVigorFrame:Hide()
+
+
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
 
@@ -99,12 +102,14 @@ function AZP.DragonRider:FillVigorFrame()
 
     if AZP.DragonRider:IsDragonRiding() == true then
         SavedVigor = curVigor
+        CustomVigorFrame:Hide()
     else
         if curRecharge < SavedRecharge and curRecharge ~= 0 then
             if SavedVigor < MaxVigor then
                 SavedVigor = SavedVigor + 1
             end
         end
+        CustomVigorFrame:Show()
     end
 
     local NextVigor = SavedVigor + 1
@@ -120,13 +125,20 @@ function AZP.DragonRider:FillVigorFrame()
 end
 
 function AZP.DragonRider:IsDragonRiding()
-    for i = 1, 40 do
-        local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
-        if SpellID == nil then return false end
-        if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
-            return true
-        end
+    local widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(2107);
+	if widgetInfo and widgetInfo.shownState ~= Enum.WidgetShownState.Hidden then
+        return true
+    else
+        return false
     end
+
+    -- for i = 1, 40 do
+    --     local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
+    --     if SpellID == nil then return false end
+    --     if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
+    --         return true
+    --     end
+    -- end
 end
 
 function AZP.DragonRider:SavePosition()
