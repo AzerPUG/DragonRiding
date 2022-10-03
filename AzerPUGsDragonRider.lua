@@ -8,6 +8,9 @@ local EventFrame, CustomVigorFrame = nil, nil
 local SavedVigor = 0
 local MaxVigor = 0
 local SavedRecharge = 0
+local VigorGemWidth, VigorGemHeight = 30, 32
+
+local hidden = false
 
 function AZP.DragonRider:OnLoad()
     EventFrame = CreateFrame("Frame", nil, UIParent)
@@ -50,9 +53,6 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.VigorGemsSlots = {}
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
-
-    local VigorGemWidth, VigorGemHeight = 30, 32
-
     for i = 1, 6 do
         CustomVigorFrame.VigorGemsSlots[i] = CreateFrame("StatusBar", nil, CustomVigorFrame, "UIWidgetFillUpFrameTemplate")
         CustomVigorFrame.VigorGemsSlots[i]:SetSize(VigorGemWidth, VigorGemHeight)
@@ -90,10 +90,31 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[MaxVigor], "RIGHT", -13, -15)
 
-    CustomVigorFrame:Hide()
+    AZP.DragonRider:Hide()
 
 
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
+end
+
+function AZP.DragonRider:Show(numVig)
+    if hidden then
+        CustomVigorFrame:Show()
+        for i = 1, numVig do
+            CustomVigorFrame.VigorGemsSlots[i]:SetSize(VigorGemWidth, VigorGemHeight)
+        end
+        -- for i = 1, numVig do
+        --     if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
+        --     else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 12, 0) end
+        -- end
+        hidden = false
+    end
+end
+
+function AZP.DragonRider:Hide()
+    if not hidden then
+        CustomVigorFrame:Hide()
+        hidden = true
+    end
 end
 
 function AZP.DragonRider:FillVigorFrame()
@@ -102,14 +123,14 @@ function AZP.DragonRider:FillVigorFrame()
 
     if AZP.DragonRider:IsDragonRiding() == true then
         SavedVigor = curVigor
-        CustomVigorFrame:Hide()
+        AZP.DragonRider:Hide()
     else
         if curRecharge < SavedRecharge and curRecharge ~= 0 then
             if SavedVigor < MaxVigor then
                 SavedVigor = SavedVigor + 1
             end
         end
-        CustomVigorFrame:Show()
+        AZP.DragonRider:Show(MaxVigor)
     end
 
     local NextVigor = SavedVigor + 1
@@ -125,20 +146,23 @@ function AZP.DragonRider:FillVigorFrame()
 end
 
 function AZP.DragonRider:IsDragonRiding()
-    local widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(2107);
-	if widgetInfo and widgetInfo.shownState ~= Enum.WidgetShownState.Hidden then
-        return true
-    else
-        return false
-    end
-
-    -- for i = 1, 40 do
-    --     local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
-    --     if SpellID == nil then return false end
-    --     if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
-    --         return true
-    --     end
+    -- local widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(2108);
+	-- if widgetInfo and widgetInfo.shownState ~= Enum.WidgetShownState.Hidden then
+    --     print("true")
+    --     return true
+    -- else
+    --     print("false")
+    --     return false
     -- end
+
+    for i = 1, 40 do
+        local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
+        if SpellID == nil then return false end
+        if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
+            return true
+        end
+    end
+    return false
 end
 
 function AZP.DragonRider:SavePosition()
