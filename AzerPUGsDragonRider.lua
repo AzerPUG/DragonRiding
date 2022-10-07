@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 7
+AZP.VersionControl["DragonRider"] = 8
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -112,7 +112,7 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.autoHideText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
     optionFrame.autoHideText:SetPoint("LEFT", 20, -1)
     optionFrame.autoHideText:SetJustifyH("LEFT")
-    optionFrame.autoHideText:SetText("Show/Hide options button.")
+    optionFrame.autoHideText:SetText("Hide when maxed.")
 
     optionFrame.autoHideCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
     optionFrame.autoHideCheckbox:SetSize(20, 20)
