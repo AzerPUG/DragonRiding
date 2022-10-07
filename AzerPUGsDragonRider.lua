@@ -116,7 +116,7 @@ function AZP.DragonRider:BuildOptionsPanel()
 
     optionFrame.autoHideCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
     optionFrame.autoHideCheckbox:SetSize(20, 20)
-    optionFrame.autoHideCheckbox:SetPoint("LEFT", autoHideText, "RIGHT", 0, 0)
+    optionFrame.autoHideCheckbox:SetPoint("RIGHT", optionFrame.autoHideText, "LEFT", 0, 0)
     optionFrame.autoHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.autoHideCheckbox:SetChecked(VigorFrameAutoHide)
     optionFrame.autoHideCheckbox:SetScript("OnClick", function() VigorFrameAutoHide = optionFrame.autoHideCheckbox:GetChecked() end)
