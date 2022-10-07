@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 6
+AZP.VersionControl["DragonRider"] = 7
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -96,6 +96,32 @@ function AZP.DragonRider:BuildVigorFrame()
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
 
+function AZP.DragonRider:BuildOptionsPanel()
+    local optionFrame = CreateFrame("FRAME")
+	optionFrame:SetSize(500, 500)
+	-- optionFrame:SetPoint("CENTER", 0, 0)
+    optionFrame.name = "AzerPUG's Dragon Rider"
+    optionFrame.parent = nil
+    InterfaceOptions_AddCategory(optionFrame)
+
+    optionFrame.title = optionFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+	optionFrame.title:SetSize(optionFrame:GetWidth(), 50)
+	optionFrame.title:SetPoint("TOP")
+	optionFrame.title:SetText("AzerPUG's Dragon Rider")
+    
+    optionFrame.autoHideText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.autoHideText:SetPoint("LEFT", 20, -1)
+    optionFrame.autoHideText:SetJustifyH("LEFT")
+    optionFrame.autoHideText:SetText("Show/Hide options button.")
+
+    optionFrame.autoHideCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.autoHideCheckbox:SetSize(20, 20)
+    optionFrame.autoHideCheckbox:SetPoint("LEFT", autoHideText, "RIGHT", 0, 0)
+    optionFrame.autoHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.autoHideCheckbox:SetChecked(VigorFrameAutoHide)
+    optionFrame.autoHideCheckbox:SetScript("OnClick", function() VigorFrameAutoHide = optionFrame.autoHideCheckbox:GetChecked() end)
+end
+
 function AZP.DragonRider:Show(numVig)
     if hidden then
         CustomVigorFrame:Show()
@@ -141,8 +167,12 @@ function AZP.DragonRider:FillVigorFrame()
         else CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(0) end
         CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(i == SavedVigor + 1)
     end
-    --CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(NextVigor and curRecharge > 0 and curRecharge < 100)
+    -- CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(NextVigor and curRecharge > 0 and curRecharge < 100)
     if curRecharge ~= 0 then SavedRecharge = curRecharge end
+
+    if VigorFrameAutoHide then
+        if SavedVigor == MaxVigor then AZP.DragonRider:Hide() end
+    end
 end
 
 function AZP.DragonRider:IsDragonRiding()
@@ -191,6 +221,7 @@ function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
             AZP.DragonRider:BuildVigorFrame()
+            AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:LoadPosition()
         end)
     end
