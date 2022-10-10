@@ -10,8 +10,6 @@ local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 
--- local VigorAddedSound = SOUNDKIT.UI_DRAGONRIDING_FULL_NODE       -- Players everytime a vigor is added, but not when not on mount, add to options?
-
 local hidden = false
 
 function AZP.DragonRider:OnLoad()
