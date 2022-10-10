@@ -10,6 +10,8 @@ local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 
+-- local VigorAddedSound = SOUNDKIT.UI_DRAGONRIDING_FULL_NODE       -- Players everytime a vigor is added, but not when not on mount, add to options?
+
 local hidden = false
 
 function AZP.DragonRider:OnLoad()
@@ -18,24 +20,6 @@ function AZP.DragonRider:OnLoad()
     EventFrame:RegisterEvent("ADDON_LOADED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
 end
-
-local NewDragonRidingTextures =
-{
-    "dragonriding_vigor_background-2x",
-    "dragonriding_vigor_decor-2x",
-    "dragonriding_vigor_fill-2x",
-    "dragonriding_vigor_flash-2x",
-    "dragonriding_vigor_frame-2x",
-    "dragonriding_vigor_spark-2x",
-}
-
-local frameTextureKitRegions = {
-	BG = "%s_background",
-	Frame = "%s_frame",
-	Spark = "%s_spark",
-	SparkMask = "%s_mask",
-	Flash = "%s_flash",
-};
 
 function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame = CreateFrame("FRAME", nil, UIParent)
@@ -60,6 +44,7 @@ function AZP.DragonRider:BuildVigorFrame()
         else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 12, 0) end
         CustomVigorFrame.VigorGemsSlots[i].BG:SetAtlas("dragonriding_vigor_background")
         CustomVigorFrame.VigorGemsSlots[i].BG:SetSize(VigorGemWidth, VigorGemHeight)
+
         CustomVigorFrame.VigorGemsSlots[i].Bar:SetStatusBarTexture("dragonriding_vigor_fill")
         CustomVigorFrame.VigorGemsSlots[i].Bar:SetSize(VigorGemWidth, VigorGemHeight)
         CustomVigorFrame.VigorGemsSlots[i].Bar:SetMinMaxValues(0, 100)
@@ -99,7 +84,6 @@ end
 function AZP.DragonRider:BuildOptionsPanel()
     local optionFrame = CreateFrame("FRAME")
 	optionFrame:SetSize(500, 500)
-	-- optionFrame:SetPoint("CENTER", 0, 0)
     optionFrame.name = "AzerPUG's Dragon Rider"
     optionFrame.parent = nil
     InterfaceOptions_AddCategory(optionFrame)
@@ -108,7 +92,7 @@ function AZP.DragonRider:BuildOptionsPanel()
 	optionFrame.title:SetSize(optionFrame:GetWidth(), 50)
 	optionFrame.title:SetPoint("TOP")
 	optionFrame.title:SetText("AzerPUG's Dragon Rider")
-    
+
     optionFrame.autoHideText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
     optionFrame.autoHideText:SetPoint("LEFT", 20, -1)
     optionFrame.autoHideText:SetJustifyH("LEFT")
@@ -128,10 +112,6 @@ function AZP.DragonRider:Show(numVig)
         for i = 1, numVig do
             CustomVigorFrame.VigorGemsSlots[i]:SetSize(VigorGemWidth, VigorGemHeight)
         end
-        -- for i = 1, numVig do
-        --     if i == 1 then CustomVigorFrame.VigorGemsSlots[i]:SetPoint("TOPLEFT", CustomVigorFrame, "TOPLEFT", 0, -35)
-        --     else CustomVigorFrame.VigorGemsSlots[i]:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[i-1], "RIGHT", 12, 0) end
-        -- end
         hidden = false
     end
 end
@@ -162,12 +142,15 @@ function AZP.DragonRider:FillVigorFrame()
     local NextVigor = SavedVigor + 1
 
     for i = 1, MaxVigor do
-        if i <= SavedVigor then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(100)
-        elseif i == NextVigor then CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(curRecharge)
+        if i <= SavedVigor then
+            CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(100)
+            CustomVigorFrame.VigorGemsSlots[i].Bar:SetStatusBarTexture("dragonriding_vigor_fillfull")
+        elseif i == NextVigor then
+            CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(curRecharge)
+            CustomVigorFrame.VigorGemsSlots[i].Bar:SetStatusBarTexture("dragonriding_vigor_fill")
         else CustomVigorFrame.VigorGemsSlots[i].Bar:SetValue(0) end
         CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(i == SavedVigor + 1)
     end
-    -- CustomVigorFrame.VigorGemsSlots[i].Spark:SetShown(NextVigor and curRecharge > 0 and curRecharge < 100)
     if curRecharge ~= 0 then SavedRecharge = curRecharge end
 
     if VigorFrameAutoHide then
@@ -176,15 +159,6 @@ function AZP.DragonRider:FillVigorFrame()
 end
 
 function AZP.DragonRider:IsDragonRiding()
-    -- local widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(2108);
-	-- if widgetInfo and widgetInfo.shownState ~= Enum.WidgetShownState.Hidden then
-    --     print("true")
-    --     return true
-    -- else
-    --     print("false")
-    --     return false
-    -- end
-
     for i = 1, 40 do
         local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
         if SpellID == nil then return false end
