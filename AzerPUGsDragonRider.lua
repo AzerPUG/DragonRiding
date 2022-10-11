@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 9
+AZP.VersionControl["DragonRider"] = 10
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -73,8 +73,12 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame, "RIGHT", 0, 0)
     CustomVigorFrame.RightWing:SetPoint("LEFT", CustomVigorFrame.VigorGemsSlots[MaxVigor], "RIGHT", -13, -15)
 
-    AZP.DragonRider:Hide()
+    if HideSideWings == true then
+        CustomVigorFrame.LeftWing:Hide()
+        CustomVigorFrame.RightWing:Hide()
+    end
 
+    AZP.DragonRider:Hide()
 
     C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
 end
@@ -92,7 +96,7 @@ function AZP.DragonRider:BuildOptionsPanel()
 	optionFrame.title:SetText("AzerPUG's Dragon Rider")
 
     optionFrame.autoHideText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
-    optionFrame.autoHideText:SetPoint("LEFT", 20, -1)
+    optionFrame.autoHideText:SetPoint("TOPLEFT", 30, -50)
     optionFrame.autoHideText:SetJustifyH("LEFT")
     optionFrame.autoHideText:SetText("Hide when maxed.")
 
@@ -102,6 +106,18 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.autoHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.autoHideCheckbox:SetChecked(VigorFrameAutoHide)
     optionFrame.autoHideCheckbox:SetScript("OnClick", function() VigorFrameAutoHide = optionFrame.autoHideCheckbox:GetChecked() end)
+
+    optionFrame.HideWingsText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.HideWingsText:SetPoint("TOPLEFT", 30, -75)
+    optionFrame.HideWingsText:SetJustifyH("LEFT")
+    optionFrame.HideWingsText:SetText("Hide side wings.")
+
+    optionFrame.WingsHideCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.WingsHideCheckbox:SetSize(20, 20)
+    optionFrame.WingsHideCheckbox:SetPoint("RIGHT", optionFrame.HideWingsText, "LEFT", 0, 0)
+    optionFrame.WingsHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.WingsHideCheckbox:SetChecked(HideSideWings)
+    optionFrame.WingsHideCheckbox:SetScript("OnClick", function() HideSideWings = optionFrame.WingsHideCheckbox:GetChecked() end)
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -118,6 +134,16 @@ function AZP.DragonRider:Hide()
     if not hidden then
         CustomVigorFrame:Hide()
         hidden = true
+    end
+
+    if HideSideWings == true then
+        local PowerBarChildren = {UIWidgetPowerBarContainerFrame:GetChildren()}
+        if PowerBarChildren[3] ~= nil then
+            PowerBarSubChildren = {PowerBarChildren[3]:GetRegions()}
+            for _, child in ipairs(PowerBarSubChildren) do
+                child:Hide()
+            end
+        end
     end
 end
 
