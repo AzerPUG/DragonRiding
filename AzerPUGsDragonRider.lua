@@ -273,4 +273,7 @@ function AZP.DragonRider:OnEvent(_, event, ...)
     end
 end
 
-AZP.DragonRider:OnLoad()
+_version, _build, _date, tocversion = GetBuildInfo()
+if tocversion >= 100000 then
+    AZP.DragonRider:OnLoad()
+end
