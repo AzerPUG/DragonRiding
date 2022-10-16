@@ -9,13 +9,16 @@ local SavedVigor = 0
 local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
-
 local hidden = false
+local ZonesInWhichAddonIsActive = {2025}
+local CurrentZone = nil
+local Ticker = nil
 
 function AZP.DragonRider:OnLoad()
     EventFrame = CreateFrame("Frame", nil, UIParent)
     EventFrame:RegisterEvent("VARIABLES_LOADED")
     EventFrame:RegisterEvent("ADDON_LOADED")
+    EventFrame:RegisterEvent("ZONE_CHANGED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
 end
 
@@ -79,8 +82,7 @@ function AZP.DragonRider:BuildVigorFrame()
     end
 
     AZP.DragonRider:Hide()
-
-    C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
+    AZP.DragonRider:ZoneChanged()
 end
 
 function AZP.DragonRider:BuildOptionsPanel()
@@ -118,6 +120,20 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.WingsHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.WingsHideCheckbox:SetChecked(HideSideWings)
     optionFrame.WingsHideCheckbox:SetScript("OnClick", function() HideSideWings = optionFrame.WingsHideCheckbox:GetChecked() end)
+
+    optionFrame.autoHideOutOfDragonIslesText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.autoHideOutOfDragonIslesText:SetPoint("TOPLEFT", 30, -100)
+    optionFrame.autoHideOutOfDragonIslesText:SetJustifyH("LEFT")
+    optionFrame.autoHideOutOfDragonIslesText:SetText("Automatically Hide outside of Dragon Isles.")
+
+    optionFrame.autoHideOutOfDragonIslesCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.autoHideOutOfDragonIslesCheckbox:SetSize(20, 20)
+    optionFrame.autoHideOutOfDragonIslesCheckbox:SetPoint("RIGHT", optionFrame.autoHideOutOfDragonIslesText, "LEFT", 0, 0)
+    optionFrame.autoHideOutOfDragonIslesCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.autoHideOutOfDragonIslesCheckbox:SetChecked(VigorFrameAutoHideInWrongZone)
+    optionFrame.autoHideOutOfDragonIslesCheckbox:SetScript("OnClick", function() VigorFrameAutoHideInWrongZone = optionFrame.autoHideOutOfDragonIslesCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
+
+    
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -153,7 +169,9 @@ function AZP.DragonRider:FillVigorFrame()
 
     if AZP.DragonRider:IsDragonRiding() == true then
         SavedVigor = curVigor
-        AZP.DragonRider:Hide()
+        AZP.DragonRider:Show(MaxVigor)
+
+        -- AZP.DragonRider:Hide()
     else
         if curRecharge < SavedRecharge and curRecharge ~= 0 then
             if SavedVigor < MaxVigor then
@@ -215,13 +233,43 @@ function AZP.DragonRider:GetCurrentVigor()
     return #C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo(4217).entries
 end
 
+function AZP.DragonRider:ZoneChanged()
+    if CustomVigorFrame == nil then 
+        AZP.DragonRider:BuildVigorFrame()
+        AZP.DragonRider:BuildOptionsPanel()
+        AZP.DragonRider:LoadPosition()
+    end
+
+    CurrentZone = C_Map.GetBestMapForUnit("PLAYER")
+
+    if not VigorFrameAutoHideInWrongZone then
+        if Ticker == nil or Ticker:IsCancelled() then
+            Ticker = C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
+        end
+    end
+
+    if VigorFrameAutoHideInWrongZone and tContains(ZonesInWhichAddonIsActive, CurrentZone) then
+        if Ticker == nil or Ticker:IsCancelled() then
+            Ticker = C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
+        end
+    end
+
+    if VigorFrameAutoHideInWrongZone and not tContains(ZonesInWhichAddonIsActive, CurrentZone) then
+        if Ticker ~= nil then
+            Ticker:Cancel()
+        end
+        AZP.DragonRider:Hide()
+        return
+    end
+end
+
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
-            AZP.DragonRider:BuildVigorFrame()
-            AZP.DragonRider:BuildOptionsPanel()
-            AZP.DragonRider:LoadPosition()
+            AZP.DragonRider:ZoneChanged()
         end)
+    elseif event == "ZONE_CHANGED" then
+        AZP.DragonRider:ZoneChanged()
     end
 end
 
