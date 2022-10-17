@@ -10,7 +10,7 @@ local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 local hidden = false
-local ZonesInWhichAddonIsActive = {2025}
+local ZonesInWhichAddonIsActive = {2107, 2112, 2022, 2023, 2024, 2025}
 local CurrentZone = nil
 local Ticker = nil
 
