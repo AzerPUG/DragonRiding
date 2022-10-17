@@ -119,7 +119,18 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.WingsHideCheckbox:SetPoint("RIGHT", optionFrame.HideWingsText, "LEFT", 0, 0)
     optionFrame.WingsHideCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.WingsHideCheckbox:SetChecked(HideSideWings)
-    optionFrame.WingsHideCheckbox:SetScript("OnClick", function() HideSideWings = optionFrame.WingsHideCheckbox:GetChecked() end)
+    optionFrame.WingsHideCheckbox:SetScript("OnClick",
+    function()
+        if optionFrame.WingsHideCheckbox:GetChecked() == true then
+            HideSideWings = true
+            CustomVigorFrame.LeftWing:Hide()
+            CustomVigorFrame.RightWing:Hide()
+        else
+            HideSideWings = false
+            CustomVigorFrame.LeftWing:Show()
+            CustomVigorFrame.RightWing:Show()
+        end
+    end)
 
     optionFrame.autoHideOutOfDragonIslesText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
     optionFrame.autoHideOutOfDragonIslesText:SetPoint("TOPLEFT", 30, -100)
@@ -132,8 +143,6 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetChecked(VigorFrameAutoHideInWrongZone)
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetScript("OnClick", function() VigorFrameAutoHideInWrongZone = optionFrame.autoHideOutOfDragonIslesCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
-
-    
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -151,13 +160,14 @@ function AZP.DragonRider:Hide()
         CustomVigorFrame:Hide()
         hidden = true
     end
-
-    if HideSideWings == true then
-        local PowerBarChildren = {UIWidgetPowerBarContainerFrame:GetChildren()}
-        if PowerBarChildren[3] ~= nil then
-            PowerBarSubChildren = {PowerBarChildren[3]:GetRegions()}
-            for _, child in ipairs(PowerBarSubChildren) do
-                child:Hide()
+    local PowerBarChildren = {UIWidgetPowerBarContainerFrame:GetChildren()}
+    if PowerBarChildren[3] ~= nil then
+        PowerBarSubChildren = {PowerBarChildren[3]:GetRegions()}
+        for _, child in ipairs(PowerBarSubChildren) do
+            if HideSideWings == true then
+                child:SetAlpha(0)
+            else
+                child:SetAlpha(1)
             end
         end
     end
@@ -171,7 +181,7 @@ function AZP.DragonRider:FillVigorFrame()
         SavedVigor = curVigor
         AZP.DragonRider:Show(MaxVigor)
 
-        -- AZP.DragonRider:Hide()
+        AZP.DragonRider:Hide()
     else
         if curRecharge < SavedRecharge and curRecharge ~= 0 then
             if SavedVigor < MaxVigor then
@@ -234,22 +244,24 @@ function AZP.DragonRider:GetCurrentVigor()
 end
 
 function AZP.DragonRider:ZoneChanged()
-    if CustomVigorFrame == nil then 
-        AZP.DragonRider:BuildVigorFrame()
-        AZP.DragonRider:BuildOptionsPanel()
-        AZP.DragonRider:LoadPosition()
-    end
-
     CurrentZone = C_Map.GetBestMapForUnit("PLAYER")
 
     if not VigorFrameAutoHideInWrongZone then
         if Ticker == nil or Ticker:IsCancelled() then
+            if CustomVigorFrame == nil then
+                AZP.DragonRider:BuildVigorFrame()
+                AZP.DragonRider:LoadPosition()
+            end
             Ticker = C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
         end
     end
 
     if VigorFrameAutoHideInWrongZone and tContains(ZonesInWhichAddonIsActive, CurrentZone) then
         if Ticker == nil or Ticker:IsCancelled() then
+            if CustomVigorFrame == nil then
+                AZP.DragonRider:BuildVigorFrame()
+                AZP.DragonRider:LoadPosition()
+            end
             Ticker = C_Timer.NewTicker(1, function() AZP.DragonRider:FillVigorFrame() end)
         end
     end
@@ -258,7 +270,7 @@ function AZP.DragonRider:ZoneChanged()
         if Ticker ~= nil then
             Ticker:Cancel()
         end
-        AZP.DragonRider:Hide()
+        if CustomVigorFrame ~= nil then AZP.DragonRider:Hide() end
         return
     end
 end
@@ -266,6 +278,7 @@ end
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
+            AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
         end)
     elseif event == "ZONE_CHANGED" then
