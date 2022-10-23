@@ -1,16 +1,16 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 10
+AZP.VersionControl["DragonRider"] = 12
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
-local EventFrame, CustomVigorFrame = nil, nil
+local ChangeLogFrame, EventFrame, CustomVigorFrame = nil, nil, nil
 local SavedVigor = 0
 local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 local hidden = false
-local ZonesInWhichAddonIsActive = {2107, 2112, 2022, 2023, 2024, 2025}
+local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112}
 local CurrentZone = nil
 local Ticker = nil
 
@@ -275,11 +275,45 @@ function AZP.DragonRider:ZoneChanged()
     end
 end
 
+function AZP.DragonRider:CreateChangeLog()
+    ChangeLogFrame = CreateFrame("Frame", "ChangeLogFrame", UIParent, "BasicFrameTemplate")
+    ChangeLogFrame:SetSize(300, 125)
+    ChangeLogFrame:SetPoint("TOP", 0, -100)
+
+    ChangeLogFrame.Title = ChangeLogFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+    ChangeLogFrame.Title:SetPoint("TOP", 0, -3)
+    ChangeLogFrame.Title:SetText("AzerPUG DragonRider - v" .. AZP.VersionControl["DragonRider"])
+    ChangeLogFrame.Title:SetTextColor(0, 1, 1, 1)
+
+    ChangeLogFrame.SubTitle = ChangeLogFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+    ChangeLogFrame.SubTitle:SetPoint("TOP", 0, -30)
+    ChangeLogFrame.SubTitle:SetText("ChangeLog:")
+    ChangeLogFrame.SubTitle:SetTextColor(1, 0, 1, 1)
+
+    ChangeLogFrame.Text = ChangeLogFrame:CreateFontString(nil, "OVERLAY")
+    ChangeLogFrame.Text:SetFontObject("GameFontHighlight")
+    ChangeLogFrame.Text:SetPoint("TOP", 0, -55)
+    ChangeLogFrame.Text:SetText("Added ChangeLogFrame and option\nto see ChangeLogFrame on new version.\n\nDragonGlyphs on map coming: soon™!")
+    ChangeLogFrame.Text:SetTextColor(1, 1, 0, 1)
+
+    ChangeLogFrame.CloseButton:HookScript("OnClick", function() ChangeLogData.Version = AZP.VersionControl["DragonRider"] end)
+end
+
+function AZP.DragonRider:ChechChangeLogData()
+    if ChangeLogData == nil then ChangeLogData = {Show = true, Version = 0} end
+    if ChangeLogData.Show == true then
+        if ChangeLogData.Version < AZP.VersionControl["DragonRider"] then
+            AZP.DragonRider:CreateChangeLog()
+        end
+    end
+end
+
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
+            AZP.DragonRider:ChechChangeLogData()
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
