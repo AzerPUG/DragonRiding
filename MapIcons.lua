@@ -1,5 +1,7 @@
-local pins = {
-    [2022] = {
+local pins =
+{
+    [2022] =
+    {
         {AchieID=15985, PosX = 75.25, PosY = 56.99, Name = "Skytop Observatory"},
         {AchieID=15986, PosX = 74.90, PosY = 37.64, Name = "Wingrest Embassy"},
         {AchieID=15987, PosX = 40.95, PosY = 71.86, Name = "Obsidian Bulwark"},
@@ -13,11 +15,6 @@ local pins = {
         {AchieID=16668, PosX = 74.33, PosY = 57.65, Name = "Skytop Observatory Rostrum"},
         {AchieID=16669, PosX = 58.12, PosY = 78.61, Name = "Flashfrost Enclave"},
     },
-    [1536] = {
-        {X=0.1, Y=0.8},
-        {X=0.5, Y=0.85},
-        {X=0.5, Y=0.08},
-    }
 }
 
 local DragonMapDataProviderMixin = CreateFromMixins(MapCanvasDataProviderMixin)
@@ -28,10 +25,7 @@ end
 
 function DragonMapDataProviderMixin:OnAdded(...)
     MapCanvasDataProviderMixin.OnAdded(self, ...)
-    print("Dragon Riding added to map")
 end
-
-
 
 function DragonMapDataProviderMixin:OnMapChanged()
     self:RefreshAllData()
@@ -46,11 +40,9 @@ function DragonMapDataProviderMixin:RefreshAllData()
 	end
 
     local newMapID = self:GetMap():GetMapID();
-    print("Map changed to " .. newMapID)
     local pinsForMap = pins[newMapID]
     self:RemoveAllData();
     if pinsForMap then
-        print("Found pins for map")
         for i, pinInfo in ipairs(pinsForMap) do
             local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
             if completed  == false then
