@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 13
+AZP.VersionControl["DragonRider"] = 14
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local ChangeLogFrame, EventFrame, CustomVigorFrame = nil, nil, nil
@@ -293,7 +293,7 @@ function AZP.DragonRider:CreateChangeLog()
     ChangeLogFrame.Text = ChangeLogFrame:CreateFontString(nil, "OVERLAY")
     ChangeLogFrame.Text:SetFontObject("GameFontHighlight")
     ChangeLogFrame.Text:SetPoint("TOP", 0, -55)
-    ChangeLogFrame.Text:SetText("Added DragonGlyphs to Map (Waking Shores).\n\nNext zone coming: soon™!")
+    ChangeLogFrame.Text:SetText("Added DragonGlyphs to Ohn'Ahran Plains Map.\n\nNext zone coming: soon™!")
     ChangeLogFrame.Text:SetTextColor(1, 1, 0, 1)
 
     ChangeLogFrame.CloseButton:HookScript("OnClick", function() ChangeLogData.Version = AZP.VersionControl["DragonRider"] end)
@@ -311,6 +311,7 @@ end
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
+            if VigorFrameAutoHideInWrongZone == nil then VigorFrameAutoHideInWrongZone = true end
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
             AZP.DragonRider:ChechChangeLogData()
