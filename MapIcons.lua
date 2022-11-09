@@ -30,6 +30,21 @@ local pins =
         {AchieID = 16670, PosX = 48.80, PosY = 86.64, Name = "Rubyscale Outpost"},
         {AchieID = 16671, PosX = 78.36, PosY = 21.28, Name = "Mirewood Fen"},
     },
+    [2024] = -- Azure Span
+    {
+        {AchieID = 16064, PosX = 45.84, PosY = 25.66, Name = "Cobalt Assembly"},
+        {AchieID = 16065, PosX = 39.21, PosY = 62.91, Name = "Azure Archive"},
+        {AchieID = 16066, PosX = 68.64, PosY = 60.27, Name = "Ruins of Karnthar"},
+        {AchieID = 16067, PosX = 70.56, PosY = 46.25, Name = "Lost Ruins"},
+        {AchieID = 16068, PosX = 10.35, PosY = 35.91, Name = "Brackenhide Hollow"},
+        {AchieID = 16069, PosX = 26.74, PosY = 31.68, Name = "Creektooth Den"},
+        {AchieID = 16070, PosX = 60.59, PosY = 69.96, Name = "Imbu"},
+        {AchieID = 16071, PosX = 53.02, PosY = 49.13, Name = "Zelthrak Outpost"},
+        {AchieID = 16072, PosX = 67.64, PosY = 29.12, Name = "Kalthraz Fortress"},
+        {AchieID = 16073, PosX = 72.45, PosY = 39.73, Name = "Vakthros Range"},
+        {AchieID = 16672, PosX = 70.13, PosY = 86.80, Name = "Forkriver Crossing"},
+        {AchieID = 16673, PosX = 56.81, PosY = 16.06, Name = "The Fallen Course"},
+    },
 }
 
 local DragonMapDataProviderMixin = CreateFromMixins(MapCanvasDataProviderMixin)
