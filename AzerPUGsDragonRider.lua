@@ -143,6 +143,18 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetChecked(VigorFrameAutoHideInWrongZone)
     optionFrame.autoHideOutOfDragonIslesCheckbox:SetScript("OnClick", function() VigorFrameAutoHideInWrongZone = optionFrame.autoHideOutOfDragonIslesCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
+
+    optionFrame.hideGlyphsText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.hideGlyphsText:SetPoint("TOPLEFT", 30, -125)
+    optionFrame.hideGlyphsText:SetJustifyH("LEFT")
+    optionFrame.hideGlyphsText:SetText("Hide Glyph location Pins")
+
+    optionFrame.hideGlyphsCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.hideGlyphsCheckbox:SetSize(20, 20)
+    optionFrame.hideGlyphsCheckbox:SetPoint("RIGHT", optionFrame.hideGlyphsText, "LEFT", 0, 0)
+    optionFrame.hideGlyphsCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.hideGlyphsCheckbox:SetChecked(AZPHideGlyphs)
+    optionFrame.hideGlyphsCheckbox:SetScript("OnClick", function() AZPHideGlyphs = optionFrame.hideGlyphsCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
 end
 
 function AZP.DragonRider:Show(numVig)

@@ -75,7 +75,7 @@ function DragonMapDataProviderMixin:RefreshAllData()
     if pinsForMap then
         for i, pinInfo in ipairs(pinsForMap) do
             local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
-            if completed  == false then
+            if completed  == false and not AZPHideGlyphs == true then
                 local pin = self:GetMap():AcquirePin(self:GetPinTemplate())
                 pin:SetPosition(pinInfo.PosX / 100, pinInfo.PosY / 100)
             end
