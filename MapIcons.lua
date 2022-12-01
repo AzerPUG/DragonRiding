@@ -14,6 +14,8 @@ local pins =
         {AchieID = 16053, PosX = 21.88, PosY = 51.50, Name = "Obsidian Throne"},
         {AchieID = 16668, PosX = 74.33, PosY = 57.65, Name = "Skytop Observatory Rostrum"},
         {AchieID = 16669, PosX = 58.12, PosY = 78.61, Name = "Flashfrost Enclave"},
+
+        {AchieID = 16670, PosX = 48.80, PosY = 86.64, Name = "Rubyscale Outpost"},
     },
     [2023] = -- Ohn'Ahran Plains
     {
@@ -27,7 +29,7 @@ local pins =
         {AchieID = 16061, PosX = 84.43, PosY = 77.60, Name = "Dragonsprings Summit"},
         {AchieID = 16062, PosX = 86.49, PosY = 39.42, Name = "Rusza'Thar Reach"},
         {AchieID = 16063, PosX = 61.51, PosY = 64.22, Name = "Windsong Rise"},
-        {AchieID = 16670, PosX = 48.80, PosY = 86.64, Name = "Rubyscale Outpost"},
+        {AchieID = 16670, PosX = 79.96, PosY = 13.16, Name = "Rubyscale Outpost"},
         {AchieID = 16671, PosX = 78.36, PosY = 21.28, Name = "Mirewood Fen"},
     },
     [2024] = -- Azure Span
@@ -45,6 +47,25 @@ local pins =
         {AchieID = 16672, PosX = 70.13, PosY = 86.80, Name = "Forkriver Crossing"},
         {AchieID = 16673, PosX = 56.81, PosY = 16.06, Name = "The Fallen Course"},
     },
+    [2025] = -- Thaldraszus
+    {
+        {AchieID = 16098, PosX = 66.00, PosY = 82.34, Name = "Temporal Conflux"},
+        {AchieID = 16099, PosX = 46.00, PosY = 74.07, Name = "Stormshroud Peak"},
+        {AchieID = 16100, PosX = 35.56, PosY = 85.54, Name = "South Hold Gate"},
+        {AchieID = 16101, PosX = 41.21, PosY = 58.10, Name = "Valdrakken"},
+        {AchieID = 16102, PosX = 49.91, PosY = 40.35, Name = "Algeth'Era"},
+        {AchieID = 16103, PosX = 61.55, PosY = 56.60, Name = "Tyrhold"},
+        {AchieID = 16104, PosX = 62.41, PosY = 40.46, Name = "Algeth'Ar Academy"},
+        {AchieID = 16105, PosX = 67.11, PosY = 11.77, Name = "Veiled Ossuary"},
+        {AchieID = 16106, PosX = 72.39, PosY = 51.45, Name = "Vault of the Incarnates"},
+        {AchieID = 16107, PosX = 72.93, PosY = 69.21, Name = "Thaldrazsus Apex"},
+        {AchieID = 16666, PosX = 52.69, PosY = 67.42, Name = "Gelikyr Overlook"},
+        {AchieID = 16667, PosX = 55.69, PosY = 72.21, Name = "Passage of Time"},
+    },
+    [2112] = -- Valdrakken
+    {
+        {AchieID = 16101, PosX = 59.31, PosY = 37.28, Name = "Valdrakken"},
+    }
 }
 
 local DragonMapDataProviderMixin = CreateFromMixins(MapCanvasDataProviderMixin)
@@ -61,17 +82,16 @@ function DragonMapDataProviderMixin:OnMapChanged()
     self:RefreshAllData()
 end
 
-
 function DragonMapDataProviderMixin:RefreshAllData()
-    local mapInfo = C_Map.GetMapInfo(self:GetMap():GetMapID());
+    local mapInfo = C_Map.GetMapInfo(self:GetMap():GetMapID())
 	if FlagsUtil.IsSet(mapInfo.flags, Enum.UIMapFlag.HideVignettes) then
-		self:RemoveAllData();
-		return;
+		self:RemoveAllData()
+		return
 	end
 
-    local newMapID = self:GetMap():GetMapID();
+    local newMapID = self:GetMap():GetMapID()
     local pinsForMap = pins[newMapID]
-    self:RemoveAllData();
+    self:RemoveAllData()
     if pinsForMap then
         for i, pinInfo in ipairs(pinsForMap) do
             local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
@@ -86,13 +106,12 @@ function DragonMapDataProviderMixin:RefreshAllData()
 end
 
 function DragonMapDataProviderMixin:RemoveAllData()
-	self:GetMap():RemoveAllPinsByTemplate(self:GetPinTemplate());
+	self:GetMap():RemoveAllPinsByTemplate(self:GetPinTemplate())
 end
 
 local function OnLoad()
-    WorldMapFrame:AddDataProvider(CreateFromMixins(DragonMapDataProviderMixin));
+    WorldMapFrame:AddDataProvider(CreateFromMixins(DragonMapDataProviderMixin))
 end
-
 
 DragonMapPinMixin = CreateFromMixins(MapCanvasPinMixin)
 function DragonMapPinMixin:OnLoad()
@@ -104,7 +123,7 @@ function DragonMapPinMixin:OnLoad()
     self.Mask:SetSize(90, 90)
     self.Texture:AddMaskTexture(self.Mask)
     self.HighlightTexture:SetSize(100, 100)
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_TOPMOST");
+    self:UseFrameLevelType("PIN_FRAME_LEVEL_TOPMOST")
     self:SetScaleStyle()
 end
 
