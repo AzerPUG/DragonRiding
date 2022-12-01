@@ -187,6 +187,10 @@ end
 
 function AZP.DragonRider:FillVigorFrame()
     local curRecharge = AZP.DragonRider:GetRechargePercent()
+    if curRecharge == nil then
+        AZP.DragonRider:Hide()
+        return
+    end
     local curVigor = AZP.DragonRider:GetCurrentVigor()
 
     if AZP.DragonRider:IsDragonRiding() == true then
@@ -244,7 +248,12 @@ function AZP.DragonRider:LoadPosition()
 end
 
 function AZP.DragonRider:GetRechargePercent()
-    return C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220).barValue
+    local val = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
+    if val == nil then
+        return nil
+    else
+        return val.barValue
+    end
 end
 
 function AZP.DragonRider:GetMaxVigor()
