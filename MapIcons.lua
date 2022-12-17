@@ -1,5 +1,5 @@
 local AZP_PIN_TYPE_GLYPH = 1
-local AZP_PIN_TYPE_TRANSMORGAPHY = 1
+local AZP_PIN_TYPE_ROSTRUM = 2
 local pins =
 {
     [2022] = -- The Waking Shores
@@ -18,6 +18,7 @@ local pins =
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16669, PosX = 58.12, PosY = 78.61, Name = "Flashfrost Enclave"},
 
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16670, PosX = 48.80, PosY = 86.64, Name = "Rubyscale Outpost"},
+        {Type = AZP_PIN_TYPE_ROSTRUM,                PosX = 74.07, PosY = 58.11, Name = "Rostrum of transmogrification"},
     },
     [2023] = -- Ohn'Ahran Plains
     {
@@ -33,6 +34,8 @@ local pins =
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16063, PosX = 61.51, PosY = 64.22, Name = "Windsong Rise"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16670, PosX = 79.96, PosY = 13.16, Name = "Rubyscale Outpost"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16671, PosX = 78.36, PosY = 21.28, Name = "Mirewood Fen"},
+        {Type = AZP_PIN_TYPE_ROSTRUM,                PosX = 84.67, PosY = 35.54, Name = "Rostrum of transmogrification"},
+
     },
     [2024] = -- Azure Span
     {
@@ -48,6 +51,8 @@ local pins =
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16073, PosX = 72.45, PosY = 39.73, Name = "Vakthros Range"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16672, PosX = 70.13, PosY = 86.80, Name = "Forkriver Crossing"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16673, PosX = 56.81, PosY = 16.06, Name = "The Fallen Course"},
+        {Type = AZP_PIN_TYPE_ROSTRUM,                PosX = 63.58, PosY = 13.21, Name = "Rostrum of transmogrification"},
+
     },
     [2025] = -- Thaldraszus
     {
@@ -63,6 +68,7 @@ local pins =
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16107, PosX = 72.93, PosY = 69.21, Name = "Thaldrazsus Apex"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16666, PosX = 52.69, PosY = 67.42, Name = "Gelikyr Overlook"},
         {Type = AZP_PIN_TYPE_GLYPH, AchieID = 16667, PosX = 55.69, PosY = 72.21, Name = "Passage of Time"},
+        {Type = AZP_PIN_TYPE_ROSTRUM,                PosX = 25.21, PosY = 50.34, Name = "Rostrum of transmogrification"},
     },
     [2112] = -- Valdrakken
     {
@@ -97,7 +103,6 @@ function DragonMapDataProviderMixin:RefreshAllData()
     if pinsForMap then
         for i, pinInfo in ipairs(pinsForMap) do
             if pinInfo.Type == AZP_PIN_TYPE_GLYPH then
-                
                 local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
                 if completed  == false and not AZPHideGlyphs == true then
                     local pin = self:GetMap():AcquirePin(self:GetPinTemplate())
@@ -133,7 +138,8 @@ function  DragonMapPinMixin:SetData(pinInfo)
     self:SetPosition(pinInfo.PosX / 100, pinInfo.PosY / 100)
     if pinInfo.Type == AZP_PIN_TYPE_GLYPH then
         self.Texture:SetTexture("Interface/ICONS/Ability_DragonRiding_Glyph01")
-    elseif pinInfo.Type == AZP_PIN_TYPE_TRANSMORGAPHY then
+    elseif pinInfo.Type == AZP_PIN_TYPE_ROSTRUM then
+        self.Texture:SetAtlas("dragon-rostrum")
     end
     self.Texture:SetSize(100, 100)
     self.Mask = self:CreateMaskTexture()
