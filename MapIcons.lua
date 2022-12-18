@@ -102,14 +102,11 @@ function DragonMapDataProviderMixin:RefreshAllData()
         for i, pinInfo in ipairs(pinsForMap) do
             if pinInfo.Type == "Glyph" then
                 local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
-                completed = false
-                if completed == false and not AZPHideGlyphs == true then
-                    local pin = self:GetMap():AcquirePin(self:GetPinTemplate())
-                    pin:SetData(pinInfo)
+                if completed  == false and not AZPHideGlyphs == true then
+                    self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
                 end
             else
-                local pin = self:GetMap():AcquirePin(self:GetPinTemplate())
-                pin:SetData(pinInfo)
+                self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
             end
 
         end
@@ -128,24 +125,25 @@ end
 
 DragonMapPinMixin = CreateFromMixins(MapCanvasPinMixin)
 function DragonMapPinMixin:OnLoad()
-    self.HighlightTexture:SetSize(100, 100)
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_TOPMOST")
-    self:SetScaleStyle()
-end
-
-function DragonMapPinMixin:SetData(pinInfo)
-    self:SetPosition(pinInfo.PosX / 100, pinInfo.PosY / 100)
-    if pinInfo.Type == "Glyph" then
-        self.Texture:SetTexture("Interface/ICONS/Ability_DragonRiding_Glyph01")
-    elseif pinInfo.Type == "Rostrum" then
-        self.Texture:SetAtlas("dragon-rostrum")
-    end
     self.Texture:SetSize(100, 100)
     self.Mask = self:CreateMaskTexture()
     self.Mask:SetPoint("CENTER", self.Texture, "CENTER", 0, 0)
     self.Mask:SetTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
     self.Mask:SetSize(90, 90)
     self.Texture:AddMaskTexture(self.Mask)
+    
+    self:SetScaleStyle()
+    self.HighlightTexture:SetSize(100, 100)
+    self:UseFrameLevelType("PIN_FRAME_LEVEL_TOPMOST")
+end
+
+function  DragonMapPinMixin:OnAcquired(pinInfo)
+    if pinInfo.Type == "Glyph" then
+        self.Texture:SetTexture("Interface/ICONS/Ability_DragonRiding_Glyph01")
+    elseif pinInfo.Type == "Rostrum" then
+        self.Texture:SetAtlas("dragon-rostrum")
+    end
+    self:SetPosition(pinInfo.PosX / 100, pinInfo.PosY / 100)
 end
 
 function DragonMapPinMixin:OnReleased()
