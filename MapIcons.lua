@@ -108,7 +108,6 @@ function DragonMapDataProviderMixin:RefreshAllData()
             else
                 self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
             end
-
         end
     else
         self:RemoveAllData();
@@ -131,7 +130,6 @@ function DragonMapPinMixin:OnLoad()
     self.Mask:SetTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
     self.Mask:SetSize(90, 90)
     self.Texture:AddMaskTexture(self.Mask)
-    
     self:SetScaleStyle()
     self.HighlightTexture:SetSize(100, 100)
     self:UseFrameLevelType("PIN_FRAME_LEVEL_TOPMOST")
