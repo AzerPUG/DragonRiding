@@ -33,8 +33,6 @@ function AZP.DragonRider:BuildVigorFrame()
     CustomVigorFrame:SetScript("OnDragStart", CustomVigorFrame.StartMoving)
     CustomVigorFrame:SetScript("OnDragStop", function() AZP.DragonRider:SavePosition() CustomVigorFrame:StopMovingOrSizing() end)
 
-    TestVar = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
-
     CustomVigorFrame.VigorGemsSlots = {}
     MaxVigor = AZP.DragonRider:GetMaxVigor()
     SavedVigor = MaxVigor
@@ -155,6 +153,20 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.hideGlyphsCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.hideGlyphsCheckbox:SetChecked(AZPHideGlyphs)
     optionFrame.hideGlyphsCheckbox:SetScript("OnClick", function() AZPHideGlyphs = optionFrame.hideGlyphsCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
+
+    optionFrame.lockPositionText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.lockPositionText:SetPoint("TOPLEFT", 30, -125)
+    optionFrame.lockPositionText:SetJustifyH("LEFT")
+    optionFrame.lockPositionText:SetText("Hide Glyph location Pins")
+
+    optionFrame.lockPositionCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.lockPositionCheckbox:SetSize(20, 20)
+    optionFrame.lockPositionCheckbox:SetPoint("RIGHT", optionFrame.lockPositionText, "LEFT", 0, 0)
+    optionFrame.lockPositionCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.lockPositionCheckbox:SetChecked(AZPLockPosition)
+    optionFrame.lockPositionCheckbox:SetScript("OnClick", function() AZP.DragonRider:LockUnlockPosition() end)
+
+    AZP.DragonRider:LockUnlockPosition()
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -245,6 +257,24 @@ end
 function AZP.DragonRider:LoadPosition()
     if VigorFramePosition == nil then CustomVigorFrame:SetPoint("CENTER", 0, 0)
     else CustomVigorFrame:SetPoint(VigorFramePosition[1], VigorFramePosition[2], VigorFramePosition[3], VigorFramePosition[4], VigorFramePosition[5]) end
+end
+
+function AZP.DragonRider:LockUnlockPosition()
+    if optionFrame.lockPositionCheckbox:GetChecked() == true then
+        CustomVigorFrame:EnableMouse(false)
+        CustomVigorFrame:SetMovable(false)
+        CustomVigorFrame:RegisterForDrag()
+        CustomVigorFrame:SetScript("OnDragStart", nil)
+        CustomVigorFrame:SetScript("OnDragStop", nil)
+        AZPLockPosition = true
+    else
+        CustomVigorFrame:EnableMouse(true)
+        CustomVigorFrame:SetMovable(true)
+        CustomVigorFrame:RegisterForDrag("LeftButton")
+        CustomVigorFrame:SetScript("OnDragStart", CustomVigorFrame.StartMoving)
+        CustomVigorFrame:SetScript("OnDragStop", function() AZP.DragonRider:SavePosition() CustomVigorFrame:StopMovingOrSizing() end)
+        AZPLockPosition = false
+    end
 end
 
 function AZP.DragonRider:GetRechargePercent()
