@@ -13,6 +13,7 @@ local hidden = false
 local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112}
 local CurrentZone = nil
 local Ticker = nil
+local optionFrame = nil
 
 function AZP.DragonRider:OnLoad()
     EventFrame = CreateFrame("Frame", nil, UIParent)
@@ -84,7 +85,7 @@ function AZP.DragonRider:BuildVigorFrame()
 end
 
 function AZP.DragonRider:BuildOptionsPanel()
-    local optionFrame = CreateFrame("FRAME")
+    optionFrame = CreateFrame("FRAME")
 	optionFrame:SetSize(500, 500)
     optionFrame.name = "AzerPUG's Dragon Rider"
     optionFrame.parent = nil
@@ -155,9 +156,9 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.hideGlyphsCheckbox:SetScript("OnClick", function() AZPHideGlyphs = optionFrame.hideGlyphsCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
 
     optionFrame.lockPositionText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
-    optionFrame.lockPositionText:SetPoint("TOPLEFT", 30, -125)
+    optionFrame.lockPositionText:SetPoint("TOPLEFT", 30, -150)
     optionFrame.lockPositionText:SetJustifyH("LEFT")
-    optionFrame.lockPositionText:SetText("Hide Glyph location Pins")
+    optionFrame.lockPositionText:SetText("Lock Position")
 
     optionFrame.lockPositionCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
     optionFrame.lockPositionCheckbox:SetSize(20, 20)
@@ -165,8 +166,6 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.lockPositionCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.lockPositionCheckbox:SetChecked(AZPLockPosition)
     optionFrame.lockPositionCheckbox:SetScript("OnClick", function() AZP.DragonRider:LockUnlockPosition() end)
-
-    AZP.DragonRider:LockUnlockPosition()
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -366,6 +365,7 @@ function AZP.DragonRider:OnEvent(_, event, ...)
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
             AZP.DragonRider:ChechChangeLogData()
+            AZP.DragonRider:LockUnlockPosition()
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
