@@ -350,7 +350,7 @@ function AZP.DragonRider:CreateChangeLog()
     ChangeLogFrame.CloseButton:HookScript("OnClick", function() ChangeLogData.Version = AZP.VersionControl["DragonRider"] end)
 end
 
-function AZP.DragonRider:ChechChangeLogData()
+function AZP.DragonRider:CheckChangeLogData()
     if ChangeLogData == nil then ChangeLogData = {Show = true, Version = 0} end
     if ChangeLogData.Show == true then
         if ChangeLogData.Version < AZP.VersionControl["DragonRider"] then
@@ -365,7 +365,7 @@ function AZP.DragonRider:OnEvent(_, event, ...)
             if VigorFrameAutoHideInWrongZone == nil then VigorFrameAutoHideInWrongZone = true end
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
-            AZP.DragonRider:ChechChangeLogData()
+            AZP.DragonRider:CheckChangeLogData()
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
