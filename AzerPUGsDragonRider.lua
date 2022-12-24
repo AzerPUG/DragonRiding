@@ -82,6 +82,7 @@ function AZP.DragonRider:BuildVigorFrame()
 
     AZP.DragonRider:Hide()
     AZP.DragonRider:ZoneChanged()
+    AZP.DragonRider:LockUnlockPosition()
 end
 
 function AZP.DragonRider:BuildOptionsPanel()
@@ -365,7 +366,6 @@ function AZP.DragonRider:OnEvent(_, event, ...)
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
             AZP.DragonRider:ChechChangeLogData()
-            AZP.DragonRider:LockUnlockPosition()
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
