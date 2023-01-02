@@ -105,7 +105,11 @@ function DragonMapDataProviderMixin:RefreshAllData()
                 if completed  == false and not AZPHideGlyphs == true then
                     self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
                 end
-            else
+            elseif pinInfo.Type == "Rostrum" then
+                if AZPHideRostrums ~= true then
+                    self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
+                end
+            else 
                 self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
             end
         end

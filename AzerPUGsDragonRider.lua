@@ -156,8 +156,20 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.hideGlyphsCheckbox:SetChecked(AZPHideGlyphs)
     optionFrame.hideGlyphsCheckbox:SetScript("OnClick", function() AZPHideGlyphs = optionFrame.hideGlyphsCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
 
+    optionFrame.hideRostrumsText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.hideRostrumsText:SetPoint("TOPLEFT", 30, -150)
+    optionFrame.hideRostrumsText:SetJustifyH("LEFT")
+    optionFrame.hideRostrumsText:SetText("Hide rostrum of transformation location Pins")
+
+    optionFrame.hideRostrumsCheckbox = CreateFrame("CheckButton", nil, optionFrame, "ChatConfigCheckButtonTemplate")
+    optionFrame.hideRostrumsCheckbox:SetSize(20, 20)
+    optionFrame.hideRostrumsCheckbox:SetPoint("RIGHT", optionFrame.hideRostrumsText, "LEFT", 0, 0)
+    optionFrame.hideRostrumsCheckbox:SetHitRectInsets(0, 0, 0, 0)
+    optionFrame.hideRostrumsCheckbox:SetChecked(AZPHideRostrums)
+    optionFrame.hideRostrumsCheckbox:SetScript("OnClick", function() AZPHideRostrums = optionFrame.hideRostrumsCheckbox:GetChecked() AZP.DragonRider:ZoneChanged() end)
+
     optionFrame.lockPositionText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
-    optionFrame.lockPositionText:SetPoint("TOPLEFT", 30, -150)
+    optionFrame.lockPositionText:SetPoint("TOPLEFT", 30, -175)
     optionFrame.lockPositionText:SetJustifyH("LEFT")
     optionFrame.lockPositionText:SetText("Lock Position")
 

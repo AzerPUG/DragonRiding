@@ -1,4 +1,4 @@
-## SavedVariables: ChangeLogData VigorFramePosition VigorFrameAutoHide HideSideWings VigorFrameAutoHideInWrongZone AZPHideGlyphs AZPLockPosition
+## SavedVariables: ChangeLogData VigorFramePosition VigorFrameAutoHide HideSideWings VigorFrameAutoHideInWrongZone AZPHideGlyphs AZPLockPosition AZPHideRostrums
 
 AzerPUGsDragonRider.lua
 MapIcons.xml
