@@ -184,11 +184,16 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.lockPositionCheckbox:SetChecked(AZPLockPosition)
     optionFrame.lockPositionCheckbox:SetScript("OnClick", function() AZP.DragonRider:LockUnlockPosition() end)
 
+    optionFrame.VigorFrameScaleText = optionFrame:CreateFontString("OpenOptionsFrameText", "ARTWORK", "GameFontNormalLarge")
+    optionFrame.VigorFrameScaleText:SetPoint("TOPLEFT", 30, -250)
+    optionFrame.VigorFrameScaleText:SetJustifyH("LEFT")
+    optionFrame.VigorFrameScaleText:SetText("Custom Vigor Frame Scale:")
+
     optionFrame.VigorFrameScaleSlider = CreateFrame("SLIDER", "VigorFrameScaleSlider", optionFrame, "OptionsSliderTemplate")
     optionFrame.VigorFrameScaleSlider:SetHeight(20)
     optionFrame.VigorFrameScaleSlider:SetWidth(200)
     optionFrame.VigorFrameScaleSlider:SetOrientation('HORIZONTAL')
-    optionFrame.VigorFrameScaleSlider:SetPoint("TOP", optionFrame.lockPositionCheckbox, "BOTTOM", 0, -20)
+    optionFrame.VigorFrameScaleSlider:SetPoint("TOPLEFT", optionFrame.VigorFrameScaleText, "BOTTOMLEFT", 0, -20)
     optionFrame.VigorFrameScaleSlider:EnableMouse(true)
     optionFrame.VigorFrameScaleSlider.tooltipText = 'Scale for mana bars'
     VigorFrameScaleSliderLow:SetText('small')
