@@ -252,7 +252,7 @@ end
 
 function AZP.DragonRider:IsDragonRiding()
     for i = 1, 40 do
-        local name, _, _, _, _, _, _, _, _, SpellID  = UnitBuff("PLAYER", i)
+        local name, _, _, _, _, _, _, _, _, SpellID = UnitBuff("PLAYER", i)
         if SpellID == nil then return false end
         if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
             return true
