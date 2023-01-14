@@ -16,6 +16,10 @@ local Ticker = nil
 local optionFrame = nil
 
 function AZP.DragonRider:OnLoad()
+    if VigorFrameScale == nil then
+        VigorFrameScale = 1.0
+    end
+
     EventFrame = CreateFrame("Frame", nil, UIParent)
     EventFrame:RegisterEvent("VARIABLES_LOADED")
     EventFrame:RegisterEvent("ADDON_LOADED")
@@ -179,6 +183,24 @@ function AZP.DragonRider:BuildOptionsPanel()
     optionFrame.lockPositionCheckbox:SetHitRectInsets(0, 0, 0, 0)
     optionFrame.lockPositionCheckbox:SetChecked(AZPLockPosition)
     optionFrame.lockPositionCheckbox:SetScript("OnClick", function() AZP.DragonRider:LockUnlockPosition() end)
+
+    optionFrame.VigorFrameScaleSlider = CreateFrame("SLIDER", "VigorFrameScaleSlider", optionFrame, "OptionsSliderTemplate")
+    optionFrame.VigorFrameScaleSlider:SetHeight(20)
+    optionFrame.VigorFrameScaleSlider:SetWidth(200)
+    optionFrame.VigorFrameScaleSlider:SetOrientation('HORIZONTAL')
+    optionFrame.VigorFrameScaleSlider:SetPoint("TOP", optionFrame.lockPositionCheckbox, "BOTTOM", 0, -20)
+    optionFrame.VigorFrameScaleSlider:EnableMouse(true)
+    optionFrame.VigorFrameScaleSlider.tooltipText = 'Scale for mana bars'
+    VigorFrameScaleSliderLow:SetText('small')
+    VigorFrameScaleSliderHigh:SetText('big')
+    VigorFrameScaleSliderText:SetText('Scale')
+
+    optionFrame.VigorFrameScaleSlider:Show()
+    optionFrame.VigorFrameScaleSlider:SetMinMaxValues(0.5, 2)
+    optionFrame.VigorFrameScaleSlider:SetValueStep(0.1)
+
+    optionFrame.VigorFrameScaleSlider:SetScript("OnValueChanged", AZP.DragonRider.setScale)
+
 end
 
 function AZP.DragonRider:Show(numVig)
@@ -371,6 +393,11 @@ function AZP.DragonRider:CheckChangeLogData()
     end
 end
 
+function AZP.DragonRider:setScale(scale)
+    VigorFrameScale = scale
+    CustomVigorFrame:SetScale(scale)
+end
+
 function AZP.DragonRider:OnEvent(_, event, ...)
     if event == "VARIABLES_LOADED" then
         C_Timer.After(2, function()
@@ -378,6 +405,7 @@ function AZP.DragonRider:OnEvent(_, event, ...)
             AZP.DragonRider:BuildOptionsPanel()
             AZP.DragonRider:ZoneChanged()
             AZP.DragonRider:CheckChangeLogData()
+            VigorFrameScaleSlider:SetValue(VigorFrameScale)
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
