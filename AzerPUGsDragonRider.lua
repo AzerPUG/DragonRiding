@@ -24,7 +24,173 @@ function AZP.DragonRider:OnLoad()
     EventFrame:RegisterEvent("VARIABLES_LOADED")
     EventFrame:RegisterEvent("ADDON_LOADED")
     EventFrame:RegisterEvent("ZONE_CHANGED")
+    EventFrame:RegisterEvent("QUEST_REMOVED")
     EventFrame:SetScript("OnEvent", function(...) AZP.DragonRider:OnEvent(...) end)
+
+    AZP.DragonRider:BuildRacesFrame()
+end
+
+function AZP.DragonRider:BuildRacesFrame()
+    local RaceFrameWidth, RaceFrameHeight = 500, 628
+    local RaceFrameCornerSize = 166
+    local RaceFrameBorderWidth = 30
+    RaceFrame = CreateFrame("Frame", nil, ExpansionLandingPage)
+    RaceFrame:SetSize(RaceFrameWidth, RaceFrameHeight)
+    RaceFrame:SetPoint("TOPLEFT", ExpansionLandingPage, "TOPRIGHT", 10, 5)
+
+    RaceFrame.Background = RaceFrame:CreateTexture(nil, "BACKGROUND")
+    RaceFrame.Background:SetSize(RaceFrameWidth, RaceFrameHeight)
+    RaceFrame.Background:SetPoint("CENTER", RaceFrame, "CENTER", 0, 0)
+    --ExpansionLandingPage.RaceFrame.Background:SetAtlas("UI-Frame-Dragonflight-CardParchment")
+    RaceFrame.Background:SetAtlas("Dragonflight-Landingpage-Background")
+
+    RaceFrame.TopLeft = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.TopLeft:SetSize(RaceFrameCornerSize, RaceFrameCornerSize)
+    RaceFrame.TopLeft:SetPoint("TOPLEFT", RaceFrame, "TOPLEFT", 0, 0)
+    RaceFrame.TopLeft:SetAtlas("Dragonflight-NineSlice-CornerTopLeft")
+
+    RaceFrame.Top = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.Top:SetSize(RaceFrameWidth - (2 * RaceFrameCornerSize), RaceFrameBorderWidth)
+    RaceFrame.Top:SetPoint("TOP", RaceFrame, "TOP", 0, 0)
+    RaceFrame.Top:SetAtlas("_Dragonflight-NineSlice-EdgeTop")
+
+    RaceFrame.TopRight = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.TopRight:SetSize(RaceFrameCornerSize, RaceFrameCornerSize)
+    RaceFrame.TopRight:SetPoint("TOPRIGHT", RaceFrame, "TOPRIGHT", 0, 0)
+    RaceFrame.TopRight:SetAtlas("Dragonflight-NineSlice-CornerTopRight")
+
+    RaceFrame.Left = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.Left:SetSize(RaceFrameBorderWidth, RaceFrameHeight - (2 * RaceFrameCornerSize))
+    RaceFrame.Left:SetPoint("LEFT", RaceFrame, "LEFT", 0, 0)
+    RaceFrame.Left:SetAtlas("!Dragonflight-NineSlice-EdgeLeft")
+
+    RaceFrame.Right = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.Right:SetSize(RaceFrameBorderWidth, RaceFrameHeight - (2 * RaceFrameCornerSize))
+    RaceFrame.Right:SetPoint("RIGHT", RaceFrame, "RIGHT", 0, 0)
+    RaceFrame.Right:SetAtlas("!Dragonflight-NineSlice-EdgeRight")
+
+    RaceFrame.BottomLeft = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.BottomLeft:SetSize(RaceFrameCornerSize, RaceFrameCornerSize)
+    RaceFrame.BottomLeft:SetPoint("BOTTOMLEFT", RaceFrame, "BOTTOMLEFT", 0, 0)
+    RaceFrame.BottomLeft:SetAtlas("Dragonflight-NineSlice-CornerBottomLeft")
+
+    RaceFrame.Bottom = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.Bottom:SetSize(RaceFrameWidth - (2 * RaceFrameCornerSize), RaceFrameBorderWidth)
+    RaceFrame.Bottom:SetPoint("BOTTOM", RaceFrame, "BOTTOM", 0, 0)
+    RaceFrame.Bottom:SetAtlas("_Dragonflight-NineSlice-EdgeBottom")
+
+    RaceFrame.BottomRight = RaceFrame:CreateTexture(nil, "BORDER")
+    RaceFrame.BottomRight:SetSize(RaceFrameCornerSize, RaceFrameCornerSize)
+    RaceFrame.BottomRight:SetPoint("BOTTOMRIGHT", RaceFrame, "BOTTOMRIGHT", 0, 0)
+    RaceFrame.BottomRight:SetAtlas("Dragonflight-NineSlice-CornerBottomRight")
+
+    RaceFrame.TitleFrame = RaceFrame:CreateTexture(nil, "ARTWORK")
+    RaceFrame.TitleFrame:SetSize(RaceFrameWidth - 90, 60)
+    RaceFrame.TitleFrame:SetPoint("TOP", RaceFrame, "TOP", 0, 25)
+    RaceFrame.TitleFrame:SetAtlas("UI-Frame-Dragonflight-Ribbon")
+
+    RaceFrame.TitleFrame.Text = RaceFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+    RaceFrame.TitleFrame.Text:SetPoint("CENTER", RaceFrame.TitleFrame, "CENTER", 0, 1)
+    RaceFrame.TitleFrame.Text:SetText(string.format("|cff00ffffAzerPUG's DragonRider - v%d|r", AZP.VersionControl["DragonRider"]))
+    RaceFrame.TitleFrame.Text:SetShadowColor(0, 0, 0, 1)
+    RaceFrame.TitleFrame.Text:SetShadowOffset(2, -1)
+
+    RaceFrame.HeaderFrame = CreateFrame("FRAME", nil, RaceFrame)
+    RaceFrame.HeaderFrame:SetSize(RaceFrameWidth - 100, 50)
+    RaceFrame.HeaderFrame:SetPoint("TOP", RaceFrame, "TOP", 0, 0)
+
+    RaceFrame.HeaderFrame.Text = RaceFrame.HeaderFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge4Outline")
+    RaceFrame.HeaderFrame.Text:SetPoint("TOP", RaceFrame.HeaderFrame, "TOP", 0, -40)
+    RaceFrame.HeaderFrame.Text:SetText("Dragon Race Data")
+
+    RaceFrame.HeaderFrame.Divider = RaceFrame.HeaderFrame:CreateTexture(nil, "ARTWORK")
+    RaceFrame.HeaderFrame.Divider:SetSize(RaceFrameWidth - 125, 10)
+    RaceFrame.HeaderFrame.Divider:SetPoint("TOP", RaceFrame.HeaderFrame.Text, "BOTTOM", 0, -15)
+    RaceFrame.HeaderFrame.Divider:SetAtlas("dragonriding-talents-line")
+
+    RaceFrame.RaceDataFrame = CreateFrame("FRAME", nil, RaceFrame)
+    RaceFrame.RaceDataFrame:SetSize(RaceFrameWidth - 20, RaceFrameHeight - 100)
+    RaceFrame.RaceDataFrame:SetPoint("TOP", RaceFrame, "TOP", 0, -100)
+
+    RaceFrame.RaceDataFrame.Frames = {}
+
+    local ZoneIndex, TypeIndex = 0, 0
+    local LastZoneFrame, LastTypeFrame, LastRaceFrame = nil, nil, nil
+    local HeaderHeight, RaceHeight = 30, 16
+
+    for ZoneID, ZoneData in pairs(AZP.DragonRider.RaceData) do
+        ZoneIndex = ZoneIndex + 1
+        local ZoneName = C_Map.GetMapInfo(ZoneID).name
+        local curZoneFrame = CreateFrame("FRAME", nil, RaceFrame.RaceDataFrame)
+        curZoneFrame:SetSize(RaceFrame.RaceDataFrame:GetWidth() - 25, 30)
+        if ZoneIndex == 1 then
+            curZoneFrame:SetPoint("TOP", RaceFrame.RaceDataFrame, "TOP", 0, -5)
+        else
+            curZoneFrame:SetPoint("TOP", LastZoneFrame, "BOTTOM", 0, 0)
+        end
+        curZoneFrame.Header = curZoneFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+        curZoneFrame.Header:SetSize(curZoneFrame:GetWidth(), HeaderHeight)
+        curZoneFrame.Header:SetPoint("TOP", curZoneFrame, "TOP", 0, 0)
+        curZoneFrame.Header:SetText(ZoneName)
+
+        for RaceType, TypeData in pairs(ZoneData) do
+            TypeIndex = TypeIndex + 1
+            local curTypeFrame = CreateFrame("FRAME", nil, curZoneFrame)
+            curTypeFrame:SetSize(curZoneFrame:GetWidth(), 30)
+            if TypeIndex == 1 then
+                curTypeFrame:SetPoint("TOP", curZoneFrame.Header, "BOTTOM", 0, 0)
+            else
+                curTypeFrame:SetPoint("TOP", LastTypeFrame, "BOTTOM", 0, -5)
+            end
+            curTypeFrame.Header = curTypeFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+            curTypeFrame.Header:SetSize(curTypeFrame:GetWidth(), HeaderHeight)
+            curTypeFrame.Header:SetPoint("TOP", curTypeFrame, "TOP", 0, 0)
+            curTypeFrame.Header:SetText(string.format("%s Races", RaceType))
+
+            curZoneFrame:SetHeight(curZoneFrame:GetHeight() + HeaderHeight)
+
+            for curRaceIndex, curRaceData in ipairs(TypeData) do
+                local curRaceFrame = CreateFrame("FRAME", nil, RaceFrame.RaceDataFrame)
+                RaceFrame.RaceDataFrame.Frames[curRaceData.ID] = curRaceFrame
+                curRaceFrame:SetSize(curTypeFrame:GetWidth(), RaceHeight)
+                if curRaceIndex == 1 then
+                    curRaceFrame:SetPoint("TOP", curTypeFrame.Header, "BOTTOM", 0, 0)
+                else
+                    curRaceFrame:SetPoint("TOP", LastRaceFrame, "BOTTOM", 0, 0)
+                end
+
+                curRaceFrame.Name = curRaceFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                curRaceFrame.Name:SetSize(200, curRaceFrame:GetHeight())
+                curRaceFrame.Name:SetPoint("LEFT", curRaceFrame, "LEFT", 0, 0)
+                curRaceFrame.Name:SetText(curRaceData.Name)
+
+                curRaceFrame.Best = curRaceFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                curRaceFrame.Best:SetSize(75, curRaceFrame:GetHeight())
+                curRaceFrame.Best:SetPoint("LEFT", curRaceFrame.Name, "RIGHT", 10, 0)
+                local curRaceBestTime = C_CurrencyInfo.GetCurrencyInfo(curRaceData.ID).quantity / 1000
+                curRaceFrame.Best:SetText(curRaceBestTime)
+
+                curRaceFrame.Silver = curRaceFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                curRaceFrame.Silver:SetSize(75, curRaceFrame:GetHeight())
+                curRaceFrame.Silver:SetPoint("LEFT", curRaceFrame.Best, "RIGHT", 10, 0)
+                curRaceFrame.Silver:SetText(curRaceData.Silver)
+
+                curRaceFrame.Gold = curRaceFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                curRaceFrame.Gold:SetSize(75, curRaceFrame:GetHeight())
+                curRaceFrame.Gold:SetPoint("LEFT", curRaceFrame.Silver, "RIGHT", 10, 0)
+                curRaceFrame.Gold:SetText(curRaceData.Gold)
+
+                curZoneFrame:SetHeight(curZoneFrame:GetHeight() + RaceHeight)
+                curTypeFrame:SetHeight(curTypeFrame:GetHeight() + RaceHeight)
+
+                LastRaceFrame = curRaceFrame
+            end
+
+            LastTypeFrame = curTypeFrame
+        end
+
+        LastZoneFrame = curZoneFrame
+    end
 end
 
 function AZP.DragonRider:BuildVigorFrame()
@@ -380,6 +546,21 @@ function AZP.DragonRider:OnEvent(_, event, ...)
         end)
     elseif event == "ZONE_CHANGED" then
         AZP.DragonRider:ZoneChanged()
+    elseif event == "QUEST_REMOVED" then
+        local curID = ...
+        if AZP.DragonRider.RaceQuestIDs[curID] ~= nil then
+            local curRaceData = AZP.DragonRider.RaceQuestIDs[curID]
+            local curRaceBestTime = C_CurrencyInfo.GetCurrencyInfo(curRaceData.ID).quantity / 1000
+            RaceFrame.RaceDataFrame.Frames[curRaceData.ID].Best:SetText(curRaceBestTime)
+        end
+
+        if TempDataGathering == nil then TempDataGathering = {} end
+
+        local QuestID = C_CurrencyInfo.GetCurrencyInfo(2018).quantity
+        local SilverTime = C_CurrencyInfo.GetCurrencyInfo(2019).quantity
+        local GoldTime = C_CurrencyInfo.GetCurrencyInfo(2020).quantity
+        local QuestName = C_QuestLog.GetTitleForQuestID(QuestID)
+        if TempDataGathering[QuestID] == nil then TempDataGathering[QuestID] = {Silver = SilverTime, Gold = GoldTime, Name = QuestName} end
     end
 end
 

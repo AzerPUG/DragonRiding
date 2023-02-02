@@ -1,5 +1,6 @@
 ## Interface: 100005
-## SavedVariables: ChangeLogData VigorFrameScale VigorFramePosition VigorFrameAutoHide HideSideWings VigorFrameAutoHideInWrongZone AZPHideGlyphs AZPLockPosition AZPHideRostrums
+## SavedVariables: TempDataGathering ChangeLogData VigorFrameScale VigorFramePosition VigorFrameAutoHide HideSideWings VigorFrameAutoHideInWrongZone AZPHideGlyphs AZPLockPosition AZPHideRostrums
 
+RaceData.lua
 AzerPUGsDragonRider.lua
 MapIcons.xml
