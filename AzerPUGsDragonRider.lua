@@ -244,7 +244,9 @@ function AZP.DragonRider:FillVigorFrame()
     end
     local curVigor = AZP.DragonRider:GetCurrentVigor()
 
-    if AZP.DragonRider:IsDragonRiding() == true then
+    local _, isDragonRiding = C_PlayerInfo.GetGlidingInfo()
+
+    if isDragonRiding == true then
         SavedVigor = curVigor
         AZP.DragonRider:Show(MaxVigor)
 
@@ -277,16 +279,16 @@ function AZP.DragonRider:FillVigorFrame()
     end
 end
 
-function AZP.DragonRider:IsDragonRiding()
-    for i = 1, 40 do
-        local name, _, _, _, _, _, _, _, _, SpellID = UnitBuff("PLAYER", i)
-        if SpellID == nil then return false end
-        if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
-            return true
-        end
-    end
-    return false
-end
+-- function AZP.DragonRider:IsDragonRiding()
+--     for i = 1, 40 do
+--         local name, _, _, _, _, _, _, _, _, SpellID = UnitBuff("PLAYER", i)
+--         if SpellID == nil then return false end
+--         if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
+--             return true
+--         end
+--     end
+--     return false
+-- end
 
 function AZP.DragonRider:SavePosition()
     local v1, v2, v3, v4, v5 = CustomVigorFrame:GetPoint()
