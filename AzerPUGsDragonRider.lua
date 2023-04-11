@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 24
+AZP.VersionControl["DragonRider"] = 26
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -10,7 +10,7 @@ local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 local hidden = false
-local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112}
+local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112, 2151}
 local CurrentZone = nil
 local Ticker = nil
 local optionFrame = nil
@@ -279,17 +279,6 @@ function AZP.DragonRider:FillVigorFrame()
     end
 end
 
--- function AZP.DragonRider:IsDragonRiding()
---     for i = 1, 40 do
---         local name, _, _, _, _, _, _, _, _, SpellID = UnitBuff("PLAYER", i)
---         if SpellID == nil then return false end
---         if SpellID == 368896 or SpellID == 368899 or SpellID == 360954 or SpellID == 368901 then
---             return true
---         end
---     end
---     return false
--- end
-
 function AZP.DragonRider:SavePosition()
     local v1, v2, v3, v4, v5 = CustomVigorFrame:GetPoint()
     VigorFramePosition = {v1, v2, v3, v4, v5}
@@ -368,8 +357,10 @@ function AZP.DragonRider:ZoneChanged()
 end
 
 function AZP.DragonRider:setScale(scale)
-    VigorFrameScale = scale
-    CustomVigorFrame:SetScale(scale)
+    if CustomVigorFrame ~= nil then
+        VigorFrameScale = scale
+        CustomVigorFrame:SetScale(scale)
+    end
 end
 
 function AZP.DragonRider:OnEvent(_, event, ...)

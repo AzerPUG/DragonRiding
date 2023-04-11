@@ -71,6 +71,17 @@ local pins =
     [2112] = -- Valdrakken
     {
         {Type = "Glyph", AchieID = 16101, PosX = 59.31, PosY = 37.28, Name = "Valdrakken"},
+    },
+    [2151] = -- The Forbidden Reach
+    {
+        {Type = "Glyph", AchieID = 17398, PosX = 18.33, PosY = 13.18, Name = "Winglord's Perch"},
+        {Type = "Glyph", AchieID = 17399, PosX = 20.53, PosY = 91.39, Name = "Talon's Watch"},
+        {Type = "Glyph", AchieID = 17400, PosX = 62.54, PosY = 32.34, Name = "Froststone Peak"},
+        {Type = "Glyph", AchieID = 17401, PosX = 79.46, PosY = 32.61, Name = "Dragonskull Island"},
+        {Type = "Glyph", AchieID = 17402, PosX = 77.34, PosY = 55.12, Name = "Stormsunder Mountain"},
+        {Type = "Glyph", AchieID = 17403, PosX = 48.51, PosY = 68.95, Name = "The Frosted Spine"},
+        {Type = "Glyph", AchieID = 17404, PosX = 59.05, PosY = 65.06, Name = "Talonlords' Perch"},
+        {Type = "Glyph", AchieID = 17405, PosX = 37.72, PosY = 30.66, Name = "Caldera of the Menders"},
     }
 }
 
@@ -109,7 +120,7 @@ function DragonMapDataProviderMixin:RefreshAllData()
                 if AZPHideRostrums ~= true then
                     self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
                 end
-            else 
+            else
                 self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
             end
         end
