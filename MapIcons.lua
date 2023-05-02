@@ -82,6 +82,17 @@ local pins =
         {Type = "Glyph", AchieID = 17403, PosX = 48.51, PosY = 68.95, Name = "The Frosted Spine"},
         {Type = "Glyph", AchieID = 17404, PosX = 59.05, PosY = 65.06, Name = "Talonlords' Perch"},
         {Type = "Glyph", AchieID = 17405, PosX = 37.72, PosY = 30.66, Name = "Caldera of the Menders"},
+    },
+    [2133] = -- Zaralek Cavern
+    {
+        {Type = "Glyph", AchieID = 17510, PosX = 41.75, PosY = 80.65, Name = "Glimmerogg"},
+        {Type = "Glyph", AchieID = 17511, PosX = 62.61, PosY = 73.39, Name = "Nal Ks'Kol"},
+        {Type = "Glyph", AchieID = 17512, PosX = 54.67, PosY = 54.72, Name = "Loamm"},
+        {Type = "Glyph", AchieID = 17513, PosX = 30.43, PosY = 45.32, Name = "Zaqali Caldera"},
+        {Type = "Glyph", AchieID = 17514, PosX = 55.19, PosY = 27.90, Name = "Slitherdrake Roost"},
+        {Type = "Glyph", AchieID = 17515, PosX = 72.17, PosY = 48.41, Name = "The Throughway"},
+        {Type = "Glyph", AchieID = 17516, PosX = 47.42, PosY = 37.02, Name = "Acidbite Ravine"},
+        {Type = "Glyph", AchieID = 17517, PosX = 48.07, PosY = 04.70, Name = "Aberrus Approach"},
     }
 }
 
