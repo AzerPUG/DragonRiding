@@ -308,20 +308,20 @@ function AZP.DragonRider:LockUnlockPosition()
 end
 
 function AZP.DragonRider:GetRechargePercent()
-    local val = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(4220)
+    local val = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(4460)
     if val == nil then
         return nil
     else
-        return val.barValue
+        return val.fillValue
     end
 end
 
 function AZP.DragonRider:GetMaxVigor()
-    return #C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo(4216).entries
+    return C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(4460).numTotalFrames
 end
 
 function AZP.DragonRider:GetCurrentVigor()
-    return #C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo(4217).entries
+    return C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(4460).numFullFrames
 end
 
 function AZP.DragonRider:ZoneChanged()
