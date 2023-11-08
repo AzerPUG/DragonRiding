@@ -1,7 +1,7 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 
-AZP.VersionControl["DragonRider"] = 27
+AZP.VersionControl["DragonRider"] = 28
 if AZP.DragonRider == nil then AZP.DragonRider = {} end
 
 local EventFrame, CustomVigorFrame = nil, nil
@@ -10,7 +10,7 @@ local MaxVigor = 0
 local SavedRecharge = 0
 local VigorGemWidth, VigorGemHeight = 30, 32
 local hidden = false
-local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112, 2151, 2133}
+local ZonesInWhichAddonIsActive = {2022, 2023, 2024, 2025, 2107, 2112, 2151, 2133, 2200}
 local CurrentZone = nil
 local Ticker = nil
 local optionFrame = nil

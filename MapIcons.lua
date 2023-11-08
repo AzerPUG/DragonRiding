@@ -93,6 +93,17 @@ local pins =
         {Type = "Glyph", AchieID = 17515, PosX = 72.17, PosY = 48.41, Name = "The Throughway"},
         {Type = "Glyph", AchieID = 17516, PosX = 47.42, PosY = 37.02, Name = "Acidbite Ravine"},
         {Type = "Glyph", AchieID = 17517, PosX = 48.07, PosY = 04.70, Name = "Aberrus Approach"},
+    },
+    [2200] = -- Emerald Dream
+    {
+        {Type = "Glyph", AchieID = 19296, PosX = 60.29, PosY = 30.35, Name = "Eye of Ysera"},
+        {Type = "Glyph", AchieID = 19297, PosX = 21.25, PosY = 26.76, Name = "Furnace Coil"},
+        {Type = "Glyph", AchieID = 19298, PosX = 33.93, PosY = 45.66, Name = "Smoldering Copse"},
+        {Type = "Glyph", AchieID = 19299, PosX = 29.83, PosY = 21.26, Name = "Cinder Summit"},
+        {Type = "Glyph", AchieID = 19300, PosX = 45.53, PosY = 45.76, Name = "Dreamsurge Basin"},
+        {Type = "Glyph", AchieID = 19301, PosX = 49.96, PosY = 64.29, Name = "Amirdrassil"},
+        {Type = "Glyph", AchieID = 19302, PosX = 31.86, PosY = 80.59, Name = "Whorlwing Basin"},
+        {Type = "Glyph", AchieID = 19303, PosX = 61.59, PosY = 75.33, Name = "Wakeful Vista"},
     }
 }
 
@@ -124,7 +135,7 @@ function DragonMapDataProviderMixin:RefreshAllData()
         for i, pinInfo in ipairs(pinsForMap) do
             if pinInfo.Type == "Glyph" then
                 local id, name, points, completed = GetAchievementInfo(pinInfo.AchieID)
-                if completed  == false and not AZPHideGlyphs == true then
+                if completed == false and not AZPHideGlyphs == true then
                     self:GetMap():AcquirePin(self:GetPinTemplate(), pinInfo)
                 end
             elseif pinInfo.Type == "Rostrum" then

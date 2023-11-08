@@ -1,4 +1,4 @@
-## Interface: 100007
+## Interface: 100200
 ## Title: |cFF00FFFF AzerPUG's|r |cFFFF00FFDragonRider|r
 ## Notes: AzerPUG's Dragon Rider
 ## SavedVariables: ChangeLogData VigorFrameScale VigorFramePosition VigorFrameAutoHide HideSideWings VigorFrameAutoHideInWrongZone AZPHideGlyphs AZPLockPosition AZPHideRostrums
